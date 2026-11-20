@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>اقراء جنۃ الاطفال — اسکول مینجمنٹ</title>
+<meta name="theme-color" content="#1F5C3D">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{--green:#1F5C3D;--green2:#2E7D52;--gold:#C9A227;--ink:#1c2420;--mut:#5c6a62;--bg:#f4f6f4;--card:#fff;--line:#dde5de;--red:#b3372f;--amber:#9a6a12}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",Tahoma,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15px}
+header{background:var(--green);color:#fff;padding:14px 16px;border-bottom:4px solid var(--gold)}
+header h1{margin:0;font-size:20px}
+header p{margin:3px 0 0;font-size:12.5px;opacity:.92}
+nav{display:flex;flex-wrap:wrap;gap:6px;background:#fff;border-bottom:1px solid var(--line);padding:8px 10px;position:sticky;top:0;z-index:5}
+nav button{border:1px solid var(--line);background:#fff;border-radius:20px;padding:6px 13px;font-size:13.5px;cursor:pointer;font-family:inherit}
+nav button.on{background:var(--green);color:#fff;border-color:var(--green)}
+main{max-width:980px;margin:0 auto;padding:14px 12px 40px}
+.sec{display:none}.sec.on{display:block}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px}
+.card b{font-size:21px;display:block;color:var(--green)}
+.card span{font-size:12.5px;color:var(--mut)}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:10px;overflow:hidden}
+th,td{border-bottom:1px solid var(--line);padding:8px 9px;text-align:right;font-size:13.5px;vertical-align:top}
+th{background:#eef4ef;color:var(--green);font-size:12.5px}
+tr:last-child td{border-bottom:none}
+.btn{background:var(--green);color:#fff;border:none;border-radius:8px;padding:8px 15px;cursor:pointer;font-family:inherit;font-size:14px}
+.btn.gold{background:var(--gold);color:#231d05}
+.btn.ghost{background:#fff;color:var(--green);border:1px solid var(--green)}
+.btn.sm{padding:4px 10px;font-size:12.5px;border-radius:6px}
+.btn.red{background:var(--red)}
+input,select,textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-family:inherit;font-size:14px;background:#fff}
+label{font-size:12.5px;color:var(--mut);display:block;margin:8px 0 3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.box{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px;margin-bottom:12px}
+h2{font-size:17px;color:var(--green);margin:4px 0 10px}
+h3{font-size:15px;color:var(--green);margin:14px 0 8px}
+.note{background:#fdf6e0;border:1px solid #e8d48a;border-radius:8px;padding:9px 12px;font-size:13px;margin-bottom:12px}
+.pill{display:inline-block;border-radius:12px;padding:1px 9px;font-size:12px;background:#eef4ef;color:var(--green)}
+.pill.due{background:#fbeae8;color:var(--red)}
+.pill.warn{background:#fdf0d5;color:var(--amber)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:end}
+.row>*{flex:1;min-width:130px}
+.small{font-size:12.5px;color:var(--mut)}
+.att{display:flex;gap:5px}
+.att button{flex:1;border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 2px;font-size:12.5px;cursor:pointer;font-family:inherit}
+.att button.p{background:var(--green);color:#fff;border-color:var(--green)}
+.att button.l{background:var(--gold);color:#231d05;border-color:var(--gold)}
+.att button.a{background:var(--red);color:#fff;border-color:var(--red)}
+#printArea{display:none}
+@media print{
+ body>*{display:none!important}
+ #printArea{display:block!important;color:#000;font-size:14px}
+ #printArea .ph{text-align:center;border-bottom:3px double #1F5C3D;padding-bottom:8px;margin-bottom:12px}
+ #printArea .ph b{font-size:20px;color:#1F5C3D}
+ #printArea table{border:1px solid #999}
+ #printArea th,#printArea td{border:1px solid #999}
+}
+</style>
+</head>
+<body>
+<header>
+<h1>اقراء جنۃ الاطفال سکول اینڈ اکیڈمی</h1>
+<p>رسول نگر، ضلع وزیرآباد — اسکول مینجمنٹ سسٹم | واٹس ایپ: 0334-8169037</p>
+</header>
+<nav id="nav"></nav>
+<main id="main"></main>
+<div id="printArea"></div>
+<script>
+"use strict";
+/* ============ DATA ============ */
+const KEY="iqraSchoolDB_v1";
+const CLASSES=["پلے گروپ","نرسری","پریپ","کلاس 1","کلاس 2","کلاس 3","کلاس 4","کلاس 5"];
+let DB=null;
+function save(){localStorage.setItem(KEY,JSON.stringify(DB));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function today(){return new Date().toISOString().slice(0,10);}
+function ym(d){return (d||today()).slice(0,7);}
+function money(n){return "Rs "+Number(n||0).toLocaleString("en-US");}
+function seed(){
+ DB={students:[],payments:[],attendance:[],teachers:[],salaryPayments:[],expenses:[],results:[],inquiries:[],planTasks:[],demo:true};
+ const S=[["احمد رضا (ڈیمو)","محمد سلیم","پریپ",2160,2160],["فاطمہ زہرا (ڈیمو)","علی احمد","کلاس 1",2400,0],["محمد عمر (ڈیمو)","محمد اکرم","نرسری",1440,1440],["عائشہ بی بی (ڈیمو)","غلام رسول","پلے گروپ",1500,0],["حسن علی (ڈیمو)","محمد یوسف","کلاس 2",2640,1200],["مریم خالد (ڈیمو)","خالد محمود","کلاس 1",2280,0],["عبداللہ (ڈیمو)","حافظ نذیر","نرسری",1368,684],["زینب فاطمہ (ڈیمو)","محمد شفیق","پریپ",2160,4320],["بلال احمد (ڈیمو)","احمد دین","کلاس 3",2760,0],["نور فاطمہ (ڈیمو)","محمد اصغر","پلے گروپ",1500,1500]];
+ S.forEach((s,i)=>{DB.students.push({id:uid()+i,adm:"2027-"+String(i+1).padStart(3,"0"),name:s[0],father:s[1],cls:s[2],fee:s[3],arrears:s[4],phone:"03xx-xxxxxxx"});});
+ const t=today();
+ DB.students.forEach((s,i)=>{if(i%2===0)DB.payments.push({id:uid()+"p"+i,studentId:s.id,date:t,amount:Math.min(s.fee,1500),note:"نمونہ وصولی"});});
+ [["مس عائشہ صدیقہ (ڈیمو)",4500],["مس ملائکہ (ڈیمو)",4000],["مس حفصہ (ڈیمو)",4000]].forEach((x,i)=>{const id=uid()+"t"+i;DB.teachers.push({id,name:x[0],salary:x[1]});DB.salaryPayments.push({id:uid()+"s"+i,teacherId:id,month:ym(),amount:x[1],date:t});});
+ [["بجلی کا بل","سہولیات",3200],["اسٹیشنری","تعلیمی سامان",1500],["صفائی کا سامان","صفائی",800]].forEach((x,i)=>DB.expenses.push({id:uid()+"e"+i,date:t,title:x[0]+" (ڈیمو)",category:x[1],amount:x[2]}));
+ const subs=[["اردو",88,100],["انگریزی",76,100],["ریاضی",92,100],["اسلامیات",95,100]];
+ DB.students.slice(0,3).forEach((s,i)=>subs.forEach((x,j)=>DB.results.push({id:uid()+"r"+i+j,studentId:s.id,exam:"دسمبر امتحان 2026",subject:x[0],obtained:x[1]-(i*3),total:x[2]})));
+ [["محمد انس کے والد","پریپ","رابطہ ہو گیا"],["ایک والدہ (ڈیمو)","نرسری","نئی درخواست"],["وزٹ کرنے والے والد (ڈیمو)","کلاس 1","وزٹ ہو گیا"]].forEach((x,i)=>DB.inquiries.push({id:uid()+"q"+i,date:t,name:x[0],cls:x[1],phone:"03xx-xxxxxxx",status:x[2]}));
+ ["31 دسمبر: رزلٹ اور والدین کانفرنس — پرانے طلبہ کی دوبارہ داخلہ تصدیق","1 جنوری 2027: داخلے کھولنا — پن شدہ پوسٹ اور فلائر تقسیم","والدین سے ریفرل کی درخواست (ہر خاندان ایک نام)","پوچھ گچھ رجسٹر روزانہ دیکھنا اور فالو اپ کال","10 جنوری 2027: نئی کلاسز کا آغاز"].forEach((x,i)=>DB.planTasks.push({id:uid()+"k"+i,text:x,done:i<1}));
+ save();
+}
+function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;} if(!DB||!DB.students) seed();}
+/* ============ HELPERS ============ */
+function st(id){return DB.students.find(s=>s.id===id);}
+function paidThisMonth(id,m){m=m||ym();return DB.payments.filter(p=>p.studentId===id&&ym(p.date)===m).reduce((a,p)=>a+p.amount,0);}
+function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===id&&a.status==="absent"&&ym(a.date)===m).length;}
+function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+ (s.fee - paidThisMonth(id)));}
+function esc(x){return String(x??"").replace(/&/g,"&amp;").replace(/</g,"&lt;");}
+/* ============ UI ============ */
+const TABS=[["dash","جائزہ"],["students","طلبہ"],["fees","فیس"],["register","ماہانہ رجسٹر"],["attendance","حاضری"],["teachers","اساتذہ و تنخواہ"],["expenses","اخراجات"],["results","نتائج"],["admissions","داخلہ پلان 2027"],["templates","ٹیمپلیٹس"],["backup","بیک اپ"]];
+let cur="dash", attDate=today(), regMonth=ym(), feeStudent="";
+function renderNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="${cur===t[0]?"on":""}" onclick="go('${t[0]}')">${t[1]}</button>`).join("");}
+function go(t){cur=t;render();}
+function render(){renderNav();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup};m.innerHTML=(DB.demo?`<div class="note">یہ <b>ڈیمو ڈیٹا</b> ہے (ناموں کے ساتھ «ڈیمو» لکھا ہے)۔ اصل ریکارڈ ابھی Excel ورک بک ہی ہے۔ جب تیار ہوں تو «بیک اپ» حصے سے ڈیمو صاف کر کے اصل طلبہ شامل کریں۔</div>`:"")+(R[cur]?R[cur]():"");}
+function classCounts(){return CLASSES.map(c=>[c,DB.students.filter(s=>s.cls===c).length]).filter(x=>x[1]>0);}
+function rDash(){
+ const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
+ const fees=DB.students.reduce((a,s)=>a+s.fee,0);const arr=DB.students.reduce((a,s)=>a+dues(s.id),0);
+ const exp=DB.expenses.filter(e=>ym(e.date)===m).reduce((a,e)=>a+e.amount,0);
+ const sal=DB.salaryPayments.filter(p=>p.month===m).reduce((a,p)=>a+p.amount,0);
+ return `<h2>جائزہ — ${m}</h2><div class="cards">
+ <div class="card"><b>${DB.students.length}</b><span>کل طلبہ</span></div>
+ <div class="card"><b>${money(fees)}</b><span>ماہانہ فیس (کل)</span></div>
+ <div class="card"><b>${money(col)}</b><span>اس ماہ کی وصولی</span></div>
+ <div class="card"><b>${money(arr)}</b><span>کل بقایا</span></div>
+ <div class="card"><b>${money(exp+sal)}</b><span>اس ماہ کے اخراجات (تنخواہ سمیت)</span></div>
+ <div class="card"><b>${money(col-exp-sal)}</b><span>اس ماہ کی بچت</span></div></div>
+ <div class="box"><h3>کلاس وار طلبہ</h3>${classCounts().map(x=>`<span class="pill">${x[0]}: ${x[1]}</span> `).join("")||"—"}</div>
+ <div class="box"><h3>بقایا والے طلبہ</h3>${DB.students.filter(s=>dues(s.id)>0).map(s=>`<div>${esc(s.name)} — ${esc(s.cls)} — <b>${money(dues(s.id))}</b></div>`).join("")||"کوئی بقایا نہیں"}</div>`;
+}
+/* ---- Students ---- */
+let stuQ="",stuCls="";
+function rStudents(){
+ let list=DB.students.filter(s=>(!stuCls||s.cls===stuCls)&&(!stuQ||s.name.includes(stuQ)||s.adm.includes(stuQ)));
+ return `<h2>طلبہ (${DB.students.length})</h2>
+ <div class="row"><div><label>تلاش (نام / داخلہ نمبر)</label><input value="${esc(stuQ)}" oninput="stuQ=this.value;render()"></div>
+ <div><label>کلاس</label><select onchange="stuCls=this.value;render()"><option value="">تمام کلاسز</option>${CLASSES.map(c=>`<option ${stuCls===c?"selected":""}>${c}</option>`).join("")}</select></div></div>
+ <table><tr><th>داخلہ نمبر</th><th>نام</th><th>والد کا نام</th><th>کلاس</th><th>ماہانہ فیس</th><th>بقایا</th><th></th></tr>
+ ${list.map(s=>`<tr><td>${s.adm}</td><td>${esc(s.name)}</td><td>${esc(s.father)}</td><td>${s.cls}</td><td>${money(s.fee)}</td><td>${dues(s.id)>0?`<span class="pill due">${money(dues(s.id))}</span>`:"—"}</td><td><button class="btn sm ghost" onclick="editStudent('${s.id}')">تبدیل</button> <button class="btn sm red" onclick="delStudent('${s.id}')">حذف</button></td></tr>`).join("")}</table>
+ <div class="box" style="margin-top:12px"><h3>نیا طالب علم</h3><div class="grid">
+ <div><label>نام</label><input id="ns_name"></div><div><label>والد کا نام</label><input id="ns_father"></div>
+ <div><label>کلاس</label><select id="ns_cls">${CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div>
+ <div><label>ماہانہ فیس (روپے)</label><input id="ns_fee" type="number"></div>
+ <div><label>پرانا بقایا (روپے)</label><input id="ns_arr" type="number" value="0"></div>
+ <div><label>والد کا فون</label><input id="ns_phone"></div></div>
+ <p class="small">بہن بھائی رعایت کا قاعدہ: سب سے بڑی کلاس والا بچہ پوری فیس؛ اگلا 5٪، تیسرا 10٪، چوتھا 15٪ کم — رعایت صرف ماہانہ فیس پر۔ رعایت کے بعد کی حتمی فیس یہاں لکھیں۔</p>
+ <button class="btn" onclick="addStudent()">شامل کریں</button></div>`;
+}
+function addStudent(){const n=document.getElementById("ns_name").value.trim();if(!n){alert("نام لکھیں");return;}
+ DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
+function editStudent(id){const s=st(id);const fee=prompt("ماہانہ فیس (روپے):",s.fee);if(fee===null)return;const arr=prompt("پرانا بقایا (روپے):",s.arrears);if(arr===null)return;s.fee=+fee||0;s.arrears=+arr||0;save();render();}
+function delStudent(id){if(!confirm("یہ طالب علم اور اس کا سارا ریکارڈ حذف ہو جائے گا۔ جاری رکھیں؟"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);save();render();}
+/* ---- Fees ---- */
+function rFees(){
+ const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
+ const fines=DB.students.map(s=>({s,d:fineDays(s.id)})).filter(x=>x.d>0);
+ return `<h2>فیس — ${m}</h2><div class="cards">
+ <div class="card"><b>${money(col)}</b><span>اس ماہ کی وصولی</span></div>
+ <div class="card"><b>${money(DB.students.reduce((a,s)=>a+dues(s.id),0))}</b><span>کل بقایا</span></div></div>
+ <div class="box"><h3>وصولی درج کریں</h3><div class="row">
+ <div><label>طالب علم</label><select id="fp_stu">${DB.students.map(s=>`<option value="${s.id}" ${feeStudent===s.id?"selected":""}>${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div>
+ <div><label>رقم (روپے)</label><input id="fp_amt" type="number"></div>
+ <div><label>تاریخ</label><input id="fp_date" type="date" value="${today()}"></div></div>
+ <div style="margin-top:10px"><button class="btn" onclick="addPayment()">وصولی درج کریں</button></div></div>
+ <div class="box"><h3>حالیہ وصولیاں</h3><table><tr><th>تاریخ</th><th>طالب علم</th><th>رقم</th><th></th></tr>
+ ${DB.payments.slice().sort((a,b)=>b.date.localeCompare(a.date)).slice(0,15).map(p=>`<tr><td>${p.date}</td><td>${esc(st(p.studentId)?.name||"")}</td><td>${money(p.amount)}</td><td><button class="btn sm ghost" onclick="printReceipt('${p.id}')">رسید پرنٹ</button></td></tr>`).join("")}</table></div>
+ <div class="box"><h3>غیر حاضری جرمانہ ریکارڈ (فیس سے الگ)</h3>
+ ${fines.length?fines.map(x=>`<div>${esc(x.s.name)} — ${x.d} دن بغیر اطلاع غیر حاضر — جرمانہ <b>${money(x.d*100)}</b> <span class="small">(وصولی یا معافی پرنسپل کا فیصلہ ہے)</span></div>`).join(""):"اس ماہ کوئی جرمانہ نہیں"}<p class="small">قاعدہ: 100 روپے یومیہ، صرف بغیر اطلاع غیر حاضری پر؛ اطلاع والی چھٹی پر کوئی جرمانہ نہیں۔</p></div>`;
+}
+function addPayment(){const sid=document.getElementById("fp_stu").value;const amt=+document.getElementById("fp_amt").value||0;if(!sid||amt<=0){alert("طالب علم اور رقم ٹھیک لکھیں");return;}
+ const s=st(sid);const payArr=Math.min(amt,s.arrears||0);s.arrears=(s.arrears||0)-payArr;
+ DB.payments.push({id:uid(),studentId:sid,date:document.getElementById("fp_date").value||today(),amount:amt,note:""});feeStudent=sid;save();render();}
+/* ---- Monthly register ---- */
+function rRegister(){
+ const rows=DB.students.map(s=>{const p=paidThisMonth(s.id,regMonth);const att=DB.attendance.filter(a=>a.studentId===s.id&&ym(a.date)===regMonth);return{s,p,pres:att.filter(a=>a.status==="present").length,fd:fineDays(s.id,regMonth),due:Math.max(0,(s.arrears||0)+s.fee-p)};});
+ return `<h2>ماہانہ رجسٹر</h2><div class="row"><div><label>مہینہ</label><input type="month" value="${regMonth}" onchange="regMonth=this.value;render()"></div></div>
+ <table><tr><th>نام</th><th>کلاس</th><th>فیس</th><th>ادائیگی</th><th>بقایا</th><th>حاضر (دن)</th><th>جرمانہ</th></tr>
+ ${rows.map(r=>`<tr><td>${esc(r.s.name)}</td><td>${r.s.cls}</td><td>${money(r.s.fee)}</td><td>${money(r.p)}</td><td>${r.due>0?`<span class="pill due">${money(r.due)}</span>`:"—"}</td><td>${r.pres}</td><td>${r.fd?money(r.fd*100):"—"}</td></tr>`).join("")}
+ <tr><th>کل</th><th></th><th>${money(rows.reduce((a,r)=>a+r.s.fee,0))}</th><th>${money(rows.reduce((a,r)=>a+r.p,0))}</th><th>${money(rows.reduce((a,r)=>a+r.due,0))}</th><th></th><th>${money(rows.reduce((a,r)=>a+r.fd*100,0))}</th></tr></table>`;
+}
+/* ---- Attendance ---- */
+function rAttendance(){
+ const day=DB.attendance.filter(a=>a.date===attDate);
+ const get=id=>(day.find(a=>a.studentId===id)||{}).status||"";
+ return `<h2>حاضری</h2><div class="row"><div><label>تاریخ</label><input type="date" value="${attDate}" onchange="attDate=this.value;render()"></div></div>
+ <table><tr><th>نام</th><th>کلاس</th><th>حاضری</th></tr>
+ ${DB.students.map(s=>{const v=get(s.id);return `<tr><td>${esc(s.name)}</td><td>${s.cls}</td><td><div class="att">
+ <button class="${v==="present"?"p":""}" onclick="markAtt('${s.id}','present')">حاضر</button>
+ <button class="${v==="leave"?"l":""}" onclick="markAtt('${s.id}','leave')">چھٹی (اطلاع)</button>
+ <button class="${v==="absent"?"a":""}" onclick="markAtt('${s.id}','absent')">غیر حاضر (بغیر اطلاع)</button></div></td></tr>`;}).join("")}</table>
+ <p class="small">خلاصہ: ${day.filter(a=>a.status==="present").length} حاضر از ${DB.students.length} — بغیر اطلاع غیر حاضری پر 100 روپے یومیہ جرمانہ خودکار الگ ریکارڈ میں آتا ہے۔</p>`;
+}
+function markAtt(id,status){DB.attendance=DB.attendance.filter(a=>!(a.studentId===id&&a.date===attDate));DB.attendance.push({id:uid(),studentId:id,date:attDate,status});save();render();}
+/* ---- Teachers ---- */
+function rTeachers(){
+ const m=ym();
+ return `<h2>اساتذہ و تنخواہ</h2><table><tr><th>نام</th><th>ماہانہ تنخواہ</th><th>اس ماہ ادائیگی</th><th></th></tr>
+ ${DB.teachers.map(t=>{const paid=DB.salaryPayments.filter(p=>p.teacherId===t.id&&p.month===m).reduce((a,p)=>a+p.amount,0);return `<tr><td>${esc(t.name)}</td><td>${money(t.salary)}</td><td>${paid>=t.salary?`<span class="pill">مکمل ${money(paid)}</span>`:`<span class="pill warn">${money(paid)} ادا</span>`}</td><td><button class="btn sm" onclick="paySalary('${t.id}')">تنخواہ درج کریں</button></td></tr>`;}).join("")}</table>
+ <div class="box" style="margin-top:12px"><h3>نئی ٹیچر</h3><div class="row"><div><label>نام</label><input id="nt_name"></div><div><label>ماہانہ تنخواہ</label><input id="nt_sal" type="number"></div></div><div style="margin-top:10px"><button class="btn" onclick="addTeacher()">شامل کریں</button></div>
+ <p class="small">چھٹی کا قاعدہ: مہینے میں 2 تنخواہ والی چھٹیاں (دو مہینے ملا کر 4 تک)؛ اضافی چھٹی پر یومیہ کٹوتی؛ بیماری/ایمرجنسی پر پرنسپل معاف کر سکتے ہیں۔</p></div>`;
+}
+function paySalary(id){const t=DB.teachers.find(x=>x.id===id);const amt=prompt("ادا شدہ رقم (روپے):",t.salary);if(amt===null)return;DB.salaryPayments.push({id:uid(),teacherId:id,month:ym(),amount:+amt||0,date:today()});save();render();}
+function addTeacher(){const n=document.getElementById("nt_name").value.trim();if(!n)return;DB.teachers.push({id:uid(),name:n,salary:+document.getElementById("nt_sal").value||0});save();render();}
+/* ---- Expenses ---- */
+function rExpenses(){
+ const m=ym();const list=DB.expenses.filter(e=>ym(e.date)===m);const tot=list.reduce((a,e)=>a+e.amount,0);
+ const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);const sal=DB.salaryPayments.filter(p=>p.month===m).reduce((a,p)=>a+p.amount,0);
+ return `<h2>اخراجات — ${m}</h2><div class="cards"><div class="card"><b>${money(tot)}</b><span>اس ماہ کے اخراجات (تنخواہ کے علاوہ)</span></div><div class="card"><b>${money(col-tot-sal)}</b><span>خالص بچت (وصولی − اخراجات − تنخواہ)</span></div></div>
+ <table><tr><th>تاریخ</th><th>مد</th><th>قسم</th><th>رقم</th><th></th></tr>
+ ${list.map(e=>`<tr><td>${e.date}</td><td>${esc(e.title)}</td><td>${esc(e.category)}</td><td>${money(e.amount)}</td><td><button class="btn sm red" onclick="delExpense('${e.id}')">حذف</button></td></tr>`).join("")}</table>
+ <div class="box" style="margin-top:12px"><h3>نیا خرچ</h3><div class="grid"><div><label>مد</label><input id="ne_title"></div>
+ <div><label>قسم</label><select id="ne_cat"><option>سہولیات</option><option>تعلیمی سامان</option><option>صفائی</option><option>مرمت</option><option>پرنٹنگ</option><option>دیگر</option></select></div>
+ <div><label>رقم</label><input id="ne_amt" type="number"></div><div><label>تاریخ</label><input id="ne_date" type="date" value="${today()}"></div></div>
+ <div style="margin-top:10px"><button class="btn" onclick="addExpense()">درج کریں</button></div></div>`;
+}
+function addExpense(){const t=document.getElementById("ne_title").value.trim();const a=+document.getElementById("ne_amt").value||0;if(!t||a<=0)return;DB.expenses.push({id:uid(),date:document.getElementById("ne_date").value||today(),title:t,category:document.getElementById("ne_cat").value,amount:a});save();render();}
+function delExpense(id){DB.expenses=DB.expenses.filter(e=>e.id!==id);save();render();}
+/* ---- Results ---- */
+let resExam="دسمبر امتحان 2026";
+function rResults(){
+ const exams=[...new Set(DB.results.map(r=>r.exam))];if(!exams.includes(resExam)&&exams.length)resExam=exams[0];
+ const rows=DB.students.map(s=>{const rs=DB.results.filter(r=>r.studentId===s.id&&r.exam===resExam);if(!rs.length)return null;const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=Math.round(ob/tt*100);const g=pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":"E";return{s,rs,ob,tt,pc,g};}).filter(Boolean);
+ return `<h2>نتائج</h2><div class="row"><div><label>امتحان</label><input value="${esc(resExam)}" onchange="resExam=this.value;render()"></div></div>
+ ${rows.map(r=>`<div class="box"><b>${esc(r.s.name)}</b> — ${r.s.cls} — مجموعی: ${r.ob}/${r.tt} — <b>${r.pc}%</b> — گریڈ <span class="pill">${r.g}</span> <button class="btn sm ghost" onclick="printResultCard('${r.s.id}')">رزلٹ کارڈ پرنٹ</button>
+ <table style="margin-top:8px"><tr><th>مضمون</th><th>حاصل</th><th>کل</th></tr>${r.rs.map(x=>`<tr><td>${esc(x.subject)}</td><td>${x.obtained}</td><td>${x.total}</td></tr>`).join("")}</table></div>`).join("")||"<p>اس امتحان کا کوئی نتیجہ درج نہیں۔</p>"}
+ <div class="box"><h3>نمبر درج کریں</h3><div class="grid">
+ <div><label>طالب علم</label><select id="nr_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div>
+ <div><label>مضمون</label><input id="nr_sub"></div><div><label>حاصل نمبر</label><input id="nr_ob" type="number"></div><div><label>کل نمبر</label><input id="nr_tt" type="number" value="100"></div></div>
+ <div style="margin-top:10px"><button class="btn" onclick="addResult()">درج کریں</button></div>
+ <p class="small">غیر حاضر طالب علم کے کارڈ پر «غیر حاضر» لکھا جاتا ہے، فیل نہیں۔</p></div>`;
+}
+function addResult(){const sub=document.getElementById("nr_sub").value.trim();if(!sub)return;DB.results.push({id:uid(),studentId:document.getElementById("nr_stu").value,exam:resExam,subject:sub,obtained:+document.getElementById("nr_ob").value||0,total:+document.getElementById("nr_tt").value||100});save();render();}
+/* ---- Admissions ---- */
+function rAdmissions(){
+ const cnt=x=>DB.inquiries.filter(i=>i.status===x).length;
+ return `<h2>داخلہ پلان — جنوری 2027</h2>
+ <div class="note">فیس نئے طلبہ کے لیے: پلے گروپ 1,500 — نرسری 1,800 — پریپ 2,000 — کلاس 1: 2,200 — کلاس 2: 2,500 — کلاس 3: 2,800 — کلاس 4: 3,000 — کلاس 5: 3,500۔ داخلہ فیس 1,000 (صرف نئے)۔ امتحانی فنڈ 800 سالانہ (400 جنوری + 400 جون)۔ فلائر پر صرف یہ جملہ: «ماہانہ فیس صرف 1,500 روپے سے شروع»۔</div>
+ <div class="cards"><div class="card"><b>${cnt("نئی درخواست")}</b><span>نئی درخواستیں</span></div><div class="card"><b>${cnt("رابطہ ہو گیا")}</b><span>رابطہ ہو گیا</span></div><div class="card"><b>${cnt("وزٹ ہو گیا")}</b><span>وزٹ ہو گیا</span></div><div class="card"><b>${cnt("داخلہ مکمل")}</b><span>داخلہ مکمل</span></div></div>
+ <div class="box"><h3>پلان چیک لسٹ</h3>${DB.planTasks.map(t=>`<div><label style="display:flex;gap:8px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" style="width:auto" ${t.done?"checked":""} onchange="toggleTask('${t.id}')"> ${esc(t.text)}</label></div>`).join("")}</div>
+ <div class="box"><h3>پوچھ گچھ رجسٹر</h3><table><tr><th>تاریخ</th><th>نام</th><th>کلاس</th><th>فون</th><th>حالت</th></tr>
+ ${DB.inquiries.map(i=>`<tr><td>${i.date}</td><td>${esc(i.name)}</td><td>${i.cls}</td><td>${esc(i.phone)}</td><td><select onchange="setInq('${i.id}',this.value)">${["نئی درخواست","رابطہ ہو گیا","وزٹ ہو گیا","داخلہ مکمل"].map(x=>`<option ${i.status===x?"selected":""}>${x}</option>`).join("")}</select></td></tr>`).join("")}</table>
+ <div class="grid" style="margin-top:10px"><div><label>نام</label><input id="nq_name"></div><div><label>کلاس</label><select id="nq_cls">${CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div><div><label>فون</label><input id="nq_phone"></div></div>
+ <div style="margin-top:10px"><button class="btn" onclick="addInq()">درج کریں</button></div></div>`;
+}
+function toggleTask(id){const t=DB.planTasks.find(x=>x.id===id);t.done=!t.done;save();render();}
+function setInq(id,v){DB.inquiries.find(i=>i.id===id).status=v;save();render();}
+function addInq(){const n=document.getElementById("nq_name").value.trim();if(!n)return;DB.inquiries.push({id:uid(),date:today(),name:n,cls:document.getElementById("nq_cls").value,phone:document.getElementById("nq_phone").value.trim(),status:"نئی درخواست"});save();render();}
+/* ---- Templates ---- */
+const PH=`<div class="ph"><b>اقراء جنۃ الاطفال سکول اینڈ اکیڈمی</b><br>محلہ رانا ٹاؤن، عقب میزبان مارکی، رسول نگر — تحصیل علی پور چٹھہ، ضلع وزیرآباد<br>واٹس ایپ: 0334-8169037 | فون: 0346-1707785</div>`;
+function rTemplates(){
+ return `<h2>ٹیمپلیٹس (پرنٹ)</h2>
+ <div class="box"><h3>ریکارڈ سے بھرے ہوئے</h3><div class="row">
+ <div><label>طالب علم منتخب کریں</label><select id="tp_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div></div>
+ <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+ <button class="btn" onclick="printVoucher(document.getElementById('tp_stu').value)">فیس واؤچر</button>
+ <button class="btn gold" onclick="printResultCard(document.getElementById('tp_stu').value)">رزلٹ کارڈ</button></div></div>
+ <div class="box"><h3>خالی فارم</h3><div style="display:flex;gap:8px;flex-wrap:wrap">
+ <button class="btn ghost" onclick="printAdmissionForm()">داخلہ فارم</button>
+ <button class="btn ghost" onclick="printLeaveSlip()">چھٹی ملنے کی رسید</button>
+ <button class="btn ghost" onclick="printNotice()">والدین کے لیے اطلاع نامہ</button></div></div>`;
+}
+function doPrint(html){document.getElementById("printArea").innerHTML=html;window.print();}
+function printVoucher(id){const s=st(id);if(!s)return;const d=dues(id);
+ doPrint(`${PH}<h3 style="text-align:center">فیس واؤچر — ${ym()}</h3>
+ <table><tr><th>داخلہ نمبر</th><td>${s.adm}</td><th>نام</th><td>${esc(s.name)}</td></tr>
+ <tr><th>کلاس</th><td>${s.cls}</td><th>والد کا نام</th><td>${esc(s.father)}</td></tr>
+ <tr><th>ماہانہ فیس</th><td>${money(s.fee)}</td><th>کل بقایا</th><td>${money(d)}</td></tr></table>
+ <p>ادائیگی کی آخری تاریخ: مہینے کی 5 تاریخ۔ فیس براہِ راست پرنسپل کو ادا کریں اور نمبر شدہ رسید ضرور لیں۔</p>
+ <p style="text-align:left">دستخط: پرنسپل</p>`);}
+function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);
+ doPrint(`${PH}<h3 style="text-align:center">فیس رسید</h3>
+ <table><tr><th>تاریخ</th><td>${p.date}</td><th>نام</th><td>${esc(s?s.name:"")}</td></tr>
+ <tr><th>کلاس</th><td>${s?s.cls:""}</td><th>وصول شدہ رقم</th><td>${money(p.amount)}</td></tr></table>
+ <p style="text-align:left">دستخط: پرنسپل</p>`);}
+function printResultCard(id){const s=st(id);if(!s)return;const rs=DB.results.filter(r=>r.studentId===id&&r.exam===resExam);
+ const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=tt?Math.round(ob/tt*100):0;const g=pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":"E";
+ doPrint(`${PH}<h3 style="text-align:center">رزلٹ کارڈ — ${esc(resExam)}</h3>
+ <p><b>نام:</b> ${esc(s.name)} &nbsp; <b>کلاس:</b> ${s.cls} &nbsp; <b>داخلہ نمبر:</b> ${s.adm}</p>
+ <table><tr><th>مضمون</th><th>حاصل نمبر</th><th>کل نمبر</th></tr>${rs.map(r=>`<tr><td>${esc(r.subject)}</td><td>${r.obtained}</td><td>${r.total}</td></tr>`).join("")}
+ <tr><th>مجموعہ</th><th>${ob}</th><th>${tt}</th></tr></table>
+ <p><b>فیصد:</b> ${pc}% &nbsp; <b>گریڈ:</b> ${g}</p><p style="text-align:left">دستخط: پرنسپل (حافظ محمد انس معاویہ)</p>`);}
+function printAdmissionForm(){doPrint(`${PH}<h3 style="text-align:center">داخلہ فارم</h3>
+ <table><tr><th>طالب علم کا نام</th><td style="width:60%"></td></tr><tr><th>تاریخ پیدائش</th><td></td></tr><tr><th>والد کا نام / شناختی کارڈ</th><td></td></tr><tr><th>والد کا پیشہ / فون</th><td></td></tr><tr><th>پتہ</th><td></td></tr><tr><th>مطلوبہ کلاس</th><td></td></tr><tr><th>ایمرجنسی رابطہ (1)</th><td></td></tr><tr><th>ایمرجنسی رابطہ (2)</th><td></td></tr><tr><th>بچہ لے جانے کے مجاز افراد</th><td></td></tr></table>
+ <p>قواعد: فیس ہر مہینے کی 5 تاریخ تک ادا کریں۔ چھٹی صرف «چھٹی ملنے کی رسید» سے ہوگی۔ بغیر اطلاع غیر حاضری پر 100 روپے یومیہ جرمانہ ہوگا جو الگ ریکارڈ میں درج ہوگا۔</p>
+ <p>والد کے دستخط: ____________ &nbsp;&nbsp; تاریخ: ____________</p>`);}
+function printLeaveSlip(){doPrint(`${PH}<h3 style="text-align:center">چھٹی ملنے کی رسید</h3>
+ <table><tr><th>طالب علم کا نام</th><td style="width:60%"></td></tr><tr><th>کلاس</th><td></td></tr><tr><th>چھٹی کی تاریخ</th><td></td></tr><tr><th>وجہ</th><td></td></tr><tr><th>والد کے دستخط</th><td></td></tr><tr><th>ٹیچر کے دستخط</th><td></td></tr></table>
+ <p>نوٹ: چھٹی صرف اس رسید کے ذریعے ہوگی — پیغام، کال یا زبانی اطلاع قابلِ قبول نہیں۔</p>`);}
+function printNotice(){doPrint(`${PH}<h3 style="text-align:center">اطلاع نامہ برائے والدین</h3>
+ <p>عنوان: ________________________________________</p>
+ <p style="min-height:160px;border:1px solid #999;padding:10px">متن یہاں لکھیں۔</p>
+ <p style="text-align:left">دستخط: پرنسپل (حافظ محمد انس معاویہ)</p>`);}
+/* ---- Backup ---- */
+function rBackup(){
+ return `<h2>بیک اپ اور ڈیٹا</h2><div class="box">
+ <p>آپ کا ڈیٹا اسی فون/کمپیوٹر کے براؤزر میں محفوظ ہوتا ہے۔ حفاظت کے لیے باقاعدہ بیک اپ فائل ڈاؤن لوڈ کر کے محفوظ رکھیں — فون بدلے یا خراب ہو تو اسی فائل سے سارا ریکارڈ واپس آ جائے گا۔</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+ <button class="btn" onclick="exportDB()">بیک اپ ڈاؤن لوڈ کریں</button>
+ <label class="btn gold" style="cursor:pointer">بیک اپ واپس لادیں<input type="file" accept=".json" style="display:none" onchange="importDB(this)"></label>
+ <button class="btn red" onclick="wipeDB()">سارا ڈیٹا صاف کریں (نئے سرے سے آغاز)</button></div>
+ <p class="small">نوٹ: یہ پہلا ورژن ہے — فون اور PC کا ڈیٹا الگ الگ رہتا ہے، خودکار آن لائن ہم آہنگی اگلی اپڈیٹ میں آئے گی۔ تبدیلیاں اگلی اپڈیٹ میں شامل ہوں گی، جیسا طے ہوا۔</p></div>`;
+}
+function exportDB(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(DB)],{type:"application/json"}));a.download="iqra-school-backup-"+today()+".json";a.click();}
+function importDB(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d&&d.students){DB=d;save();render();alert("بیک اپ واپس لوڈ ہو گیا");}else alert("فائل درست نہیں");}catch(e){alert("فائل پڑھی نہیں گئی");}};r.readAsText(f);}
+function wipeDB(){if(!confirm("سارا موجودہ ڈیٹا صاف ہو جائے گا۔ پہلے بیک اپ ڈاؤن لوڈ کر لیں۔ جاری رکھیں؟"))return;DB={students:[],payments:[],attendance:[],teachers:[],salaryPayments:[],expenses:[],results:[],inquiries:[],planTasks:[],demo:false};save();render();}
+/* ---- INIT ---- */
+load();render();
+if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
+</script>
+</body>
+</html>
