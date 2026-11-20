@@ -84,6 +84,11 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
 <p>رسول نگر، ضلع وزیرآباد — اسکول مینجمنٹ سسٹم | واٹس ایپ: 0334-8169037</p>
 <p class="slogan">تعلیم کو عزت دو</p></div>
 </header>
+<div id="bkWarn" style="display:none;background:#FFF3CD;border-bottom:2px solid #E0A800;color:#5C4300;padding:10px 14px;font-size:16px;text-align:center">
+<b>آپ نے 7 دن سے بیک اپ نہیں لیا — ابھی بیک اپ لیں</b>
+<button class="btn gold" style="margin-inline-start:10px" onclick="go('backup')">Backup پر جائیں</button>
+</div>
+
 <nav id="nav"></nav>
 <main id="main"></main>
 <footer>اقراء جنۃ الاطفال سکول اینڈ اکیڈمی — رسول نگر | تعلیم کو عزت دو</footer>
@@ -126,7 +131,7 @@ const TABS=[["dash","Dashboard"],["students","Students"],["fees","Fees"],["regis
 let cur="dash", attDate=today(), regMonth=ym(), feeStudent="";
 function renderNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="${cur===t[0]?"on":""}" onclick="go('${t[0]}')">${t[1]}</button>`).join("");}
 function go(t){cur=t;render();}
-function render(){renderNav();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup};m.innerHTML=(DB.demo?`<div class="note">یہ <b>ڈیمو ڈیٹا</b> ہے (ناموں کے ساتھ «ڈیمو» لکھا ہے)۔ اصل ریکارڈ ابھی Excel ورک بک ہی ہے۔ جب تیار ہوں تو «بیک اپ» حصے سے ڈیمو صاف کر کے اصل طلبہ شامل کریں۔</div>`:"")+(R[cur]?R[cur]():"");}
+function render(){renderNav();fillLastBk();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup};m.innerHTML=(DB.demo?`<div class="note">یہ <b>ڈیمو ڈیٹا</b> ہے (ناموں کے ساتھ «ڈیمو» لکھا ہے)۔ اصل ریکارڈ ابھی Excel ورک بک ہی ہے۔ جب تیار ہوں تو «بیک اپ» حصے سے ڈیمو صاف کر کے اصل طلبہ شامل کریں۔</div>`:"")+(R[cur]?R[cur]():"");fillLastBk();}
 function classCounts(){return CLASSES.map(c=>[c,DB.students.filter(s=>s.cls===c).length]).filter(x=>x[1]>0);}
 function rDash(){
  const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
@@ -309,6 +314,7 @@ function printNotice(){doPrint(`${PH}<h3 style="text-align:center">اطلاع ن
 function rBackup(){
  return `<h2>Backup & Data — بیک اپ</h2><div class="box">
  <p>آپ کا ڈیٹا اسی فون/کمپیوٹر کے براؤزر میں محفوظ ہوتا ہے۔ حفاظت کے لیے باقاعدہ بیک اپ فائل ڈاؤن لوڈ کر کے محفوظ رکھیں — فون بدلے یا خراب ہو تو اسی فائل سے سارا ریکارڈ واپس آ جائے گا۔</p>
+ <p id="lastBk"></p>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
  <button class="btn" onclick="exportDB()">Download Backup</button>
  <label class="btn gold" style="cursor:pointer">Restore Backup<input type="file" accept=".json" style="display:none" onchange="importDB(this)"></label>
@@ -325,7 +331,7 @@ function rBackup(){
  <button class="btn red" onclick="removePIN()">PIN Hatayein — PIN ہٹائیں</button></div>
  <p class="small">نوٹ: یہ پہلا ورژن ہے — فون اور PC کا ڈیٹا الگ الگ رہتا ہے، خودکار آن لائن ہم آہنگی اگلی اپڈیٹ میں آئے گی۔ تبدیلیاں اگلی اپڈیٹ میں شامل ہوں گی، جیسا طے ہوا۔</p></div>`;
 }
-function exportDB(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(DB)],{type:"application/json"}));a.download="iqra-school-backup-"+today()+".json";a.click();}
+function exportDB(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(DB)],{type:"application/json"}));a.download="iqra-backup-"+today()+".json";a.click();localStorage.setItem("iqraLastBackup",new Date().toISOString());checkBackup();if(cur==="backup")render();}
 function importDB(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d&&d.students){DB=d;save();render();alert("بیک اپ واپس لوڈ ہو گیا");}else alert("فائل درست نہیں");}catch(e){alert("فائل پڑھی نہیں گئی");}};r.readAsText(f);}
 function wipeDB(){if(!confirm("سارا موجودہ ڈیٹا صاف ہو جائے گا۔ پہلے بیک اپ ڈاؤن لوڈ کر لیں۔ جاری رکھیں؟"))return;DB={students:[],payments:[],attendance:[],teachers:[],salaryPayments:[],expenses:[],results:[],inquiries:[],planTasks:[],demo:false};save();render();}
 
@@ -340,6 +346,11 @@ function checkLock(){const scr=document.getElementById("lockScr");document.getEl
 function lockGo(){const v=document.getElementById("lockPin").value.trim();const saved=localStorage.getItem(PIN_KEY);if(!saved){if(!/^\d{4,6}$/.test(v)){alert("PIN 4 se 6 rakamon ka rakhein");return;}localStorage.setItem(PIN_KEY,pinHash(v));document.getElementById("lockScr").style.display="none";alert("PIN ban gaya — agli baar app kholne par yehi PIN lage ga");return;}if(pinHash(v)===saved){document.getElementById("lockScr").style.display="none";}else{alert("PIN ghalat hai — dobara koshish karein");document.getElementById("lockPin").value="";}}
 function changePIN(){const saved=localStorage.getItem(PIN_KEY);if(saved){const cur=prompt("Maujooda PIN likhein:");if(cur===null)return;if(pinHash(cur.trim())!==saved){alert("Maujooda PIN ghalat hai");return;}}const n=prompt("Naya PIN (4-6 rakam):");if(n===null)return;if(!/^\d{4,6}$/.test(n.trim())){alert("PIN 4 se 6 rakamon ka rakhein");return;}localStorage.setItem(PIN_KEY,pinHash(n.trim()));alert("PIN badal gaya");}
 function removePIN(){const saved=localStorage.getItem(PIN_KEY);if(!saved){alert("PIN pehle se laga hua nahi hai");return;}const cur=prompt("Hatane ke liye maujooda PIN likhein:");if(cur===null)return;if(pinHash(cur.trim())!==saved){alert("PIN ghalat hai");return;}localStorage.removeItem(PIN_KEY);alert("PIN hat gaya — agli baar app baghair PIN khule gi");}
+
+/* ---- Backup reminder ---- */
+function lastBackupDate(){const v=localStorage.getItem("iqraLastBackup");return v?new Date(v):null;}
+function checkBackup(){const lb=lastBackupDate();const el=document.getElementById("bkWarn");if(!el)return;const old=!lb||(Date.now()-lb.getTime()>7*24*3600*1000);el.style.display=old?"block":"none";}
+function fillLastBk(){checkBackup();const el=document.getElementById("lastBk");if(!el)return;const lb=lastBackupDate();el.innerHTML=lb?("آخری بیک اپ: <b>"+lb.toISOString().slice(0,10)+"</b>"):"آخری بیک اپ: <b>ابھی تک کوئی بیک اپ نہیں لیا</b>";}
 /* ---- INIT ---- */
 document.getElementById("logoImg").src=LOGO;
 load();render();checkLock();
