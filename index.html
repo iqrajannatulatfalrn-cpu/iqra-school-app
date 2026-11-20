@@ -62,9 +62,22 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
  #printArea table{border:1px solid #999}
  #printArea th,#printArea td{border:1px solid #999}
 }
+
+#lockScr{position:fixed;inset:0;background:linear-gradient(160deg,#1F5C3D,#123B26);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
+#lockScr .card{background:#fff;border-radius:16px;padding:28px 24px;max-width:340px;width:100%;text-align:center;box-shadow:0 12px 40px rgba(0,0,0,.35)}
+#lockScr img{width:84px;height:84px;border-radius:50%;background:#fff}
+#lockScr input{text-align:center;font-size:22px;letter-spacing:6px}
 </style>
 </head>
 <body>
+<div id="lockScr"><div class="card">
+<img id="lockLogo" alt="logo">
+<h3 id="lockTitle" style="color:#1F5C3D;margin:10px 0 4px">PIN darj karein</h3>
+<p class="small" id="lockMsg">App kholne ke liye apna PIN likhein</p>
+<input id="lockPin" type="password" inputmode="numeric" maxlength="6" placeholder="••••" autocomplete="off">
+<button class="btn" style="width:100%;margin-top:10px" onclick="lockGo()">Kholein — کھولیں</button>
+</div></div>
+
 <header>
 <img id="logoImg" alt="اسکول لوگو">
 <div class="htext"><h1>اقراء جنۃ الاطفال سکول اینڈ اکیڈمی</h1>
@@ -300,14 +313,36 @@ function rBackup(){
  <button class="btn" onclick="exportDB()">Download Backup</button>
  <label class="btn gold" style="cursor:pointer">Restore Backup<input type="file" accept=".json" style="display:none" onchange="importDB(this)"></label>
  <button class="btn red" onclick="wipeDB()">Clear All Data (Start Fresh)</button></div>
+ <h3 style="margin-top:16px">Excel Export — ایکسل فائل</h3>
+ <p>یہ فائلیں Excel میں کھلتی ہیں — پرنٹ یا شیئر کے لیے۔</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+ <button class="btn" onclick="exportStudentsCSV()">Students List (Excel)</button>
+ <button class="btn" onclick="exportRegisterCSV()">Monthly Register (Excel)</button></div>
+ <h3 style="margin-top:16px">PIN Lock — حفاظتی PIN</h3>
+ <p>ایپ کھولنے پر PIN مانگا جاتا ہے۔ PIN اسی فون میں رہتا ہے۔</p>
+ <div style="display:flex;gap:8px;flex-wrap:wrap">
+ <button class="btn gold" onclick="changePIN()">PIN Badlein — PIN بدلیں</button>
+ <button class="btn red" onclick="removePIN()">PIN Hatayein — PIN ہٹائیں</button></div>
  <p class="small">نوٹ: یہ پہلا ورژن ہے — فون اور PC کا ڈیٹا الگ الگ رہتا ہے، خودکار آن لائن ہم آہنگی اگلی اپڈیٹ میں آئے گی۔ تبدیلیاں اگلی اپڈیٹ میں شامل ہوں گی، جیسا طے ہوا۔</p></div>`;
 }
 function exportDB(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(DB)],{type:"application/json"}));a.download="iqra-school-backup-"+today()+".json";a.click();}
 function importDB(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(d&&d.students){DB=d;save();render();alert("بیک اپ واپس لوڈ ہو گیا");}else alert("فائل درست نہیں");}catch(e){alert("فائل پڑھی نہیں گئی");}};r.readAsText(f);}
 function wipeDB(){if(!confirm("سارا موجودہ ڈیٹا صاف ہو جائے گا۔ پہلے بیک اپ ڈاؤن لوڈ کر لیں۔ جاری رکھیں؟"))return;DB={students:[],payments:[],attendance:[],teachers:[],salaryPayments:[],expenses:[],results:[],inquiries:[],planTasks:[],demo:false};save();render();}
+
+/* ---- Excel (CSV) export ---- */
+function csvDL(name,rows){const txt="\ufeff"+rows.map(r=>r.map(c=>'"'+String(c==null?"":c).replace(/"/g,'""')+'"').join(",")).join("\r\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([txt],{type:"text/csv;charset=utf-8"}));a.download=name;a.click();}
+function exportStudentsCSV(){const rows=[["Adm No","Name","Father Name","Class","Monthly Fee","Arrears","Phone"]];DB.students.forEach(s=>rows.push([s.id,s.name,s.father,s.cls,s.fee,s.arrears||0,s.phone||""]));csvDL("students-list-"+today()+".csv",rows);}
+function exportRegisterCSV(){const rows=[["Name","Class","Fee","Paid ("+regMonth+")","Dues","Present Days","Fine"]];DB.students.forEach(s=>{const p=paidThisMonth(s.id,regMonth);const att=DB.attendance.filter(a=>a.studentId===s.id&&ym(a.date)===regMonth);const pres=att.filter(a=>a.status==="present").length;const fd=fineDays(s.id,regMonth);rows.push([s.name,s.cls,s.fee,p,Math.max(0,(s.arrears||0)+s.fee-p),pres,fd*100]);});csvDL("register-"+regMonth+".csv",rows);}
+/* ---- PIN lock ---- */
+const PIN_KEY="iqraSchoolPIN_v1";
+function pinHash(s){let x=7;for(let i=0;i<s.length;i++){x=(x*31+s.charCodeAt(i))>>>0;}return "p"+x;}
+function checkLock(){const scr=document.getElementById("lockScr");document.getElementById("lockLogo").src=LOGO;const has=!!localStorage.getItem(PIN_KEY);document.getElementById("lockTitle").textContent=has?"PIN darj karein — PIN درج کریں":"Pehla PIN banayein — پہلا PIN بنائیں";document.getElementById("lockMsg").textContent=has?"App kholne ke liye apna PIN likhein":"Apni pasand ka 4-6 rakamon wala PIN banayein — yehi PIN har baar app kholne par lage ga";scr.style.display="flex";document.getElementById("lockPin").focus();}
+function lockGo(){const v=document.getElementById("lockPin").value.trim();const saved=localStorage.getItem(PIN_KEY);if(!saved){if(!/^\d{4,6}$/.test(v)){alert("PIN 4 se 6 rakamon ka rakhein");return;}localStorage.setItem(PIN_KEY,pinHash(v));document.getElementById("lockScr").style.display="none";alert("PIN ban gaya — agli baar app kholne par yehi PIN lage ga");return;}if(pinHash(v)===saved){document.getElementById("lockScr").style.display="none";}else{alert("PIN ghalat hai — dobara koshish karein");document.getElementById("lockPin").value="";}}
+function changePIN(){const saved=localStorage.getItem(PIN_KEY);if(saved){const cur=prompt("Maujooda PIN likhein:");if(cur===null)return;if(pinHash(cur.trim())!==saved){alert("Maujooda PIN ghalat hai");return;}}const n=prompt("Naya PIN (4-6 rakam):");if(n===null)return;if(!/^\d{4,6}$/.test(n.trim())){alert("PIN 4 se 6 rakamon ka rakhein");return;}localStorage.setItem(PIN_KEY,pinHash(n.trim()));alert("PIN badal gaya");}
+function removePIN(){const saved=localStorage.getItem(PIN_KEY);if(!saved){alert("PIN pehle se laga hua nahi hai");return;}const cur=prompt("Hatane ke liye maujooda PIN likhein:");if(cur===null)return;if(pinHash(cur.trim())!==saved){alert("PIN ghalat hai");return;}localStorage.removeItem(PIN_KEY);alert("PIN hat gaya — agli baar app baghair PIN khule gi");}
 /* ---- INIT ---- */
 document.getElementById("logoImg").src=LOGO;
-load();render();
+load();render();checkLock();
 if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(()=>{});}
 </script>
 </body>
