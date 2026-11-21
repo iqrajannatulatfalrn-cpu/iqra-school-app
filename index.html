@@ -137,10 +137,11 @@ function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;}
 function st(id){return DB.students.find(s=>s.id===id);}
 function contactPhone(){return (DB.settings&&DB.settings.contactPhone)||"0334-8169037";}
 function saveContactPhone(){const v=document.getElementById("set_phone").value.trim();if(!v){alert("Please enter a number");return;}DB.settings={contactPhone:v};save();render();alert("Contact number saved: "+v);}
+function addFundAll(){const list=DB.students.filter(s=>(s.fee||0)>0);if(!confirm("Add Rs 400 exam-fund dues to "+list.length+" students?"))return;list.forEach(s=>{s.fund=(s.fund||0)+400;});save();alert("Exam fund added to "+list.length+" students.");}
 async function pickContact(fid){if(!navigator.contacts||!navigator.contacts.select){alert("Contact picker is not available in this browser — please type the number");return;}try{const cs=await navigator.contacts.select(["tel"],{multiple:false});if(cs&&cs.length&&cs[0].tel&&cs[0].tel.length)document.getElementById(fid).value=cs[0].tel[0];}catch(e){}}
 function paidThisMonth(id,m){m=m||ym();return DB.payments.filter(p=>p.studentId===id&&ym(p.date)===m).reduce((a,p)=>a+p.amount,0);}
 function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===id&&a.status==="absent"&&ym(a.date)===m).length;}
-function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+ (s.fee - paidThisMonth(id)));}
+function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+(s.books||0)+(s.fund||0)+(s.fee - paidThisMonth(id)));}
 function esc(x){return String(x??"").replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 /* ============ UI ============ */
 const TABS=[["dash","Dashboard"],["students","Students"],["fees","Fees"],["register","Register"],["attendance","Attendance"],["teachers","Teachers"],["expenses","Expenses"],["results","Results"],["admissions","Admissions 2027"],["templates","Templates"],["backup","Backup"],["messages","Messages"]];
@@ -173,21 +174,21 @@ function rStudents(){
  <div class="row"><div><label>Search (Name / Adm No)</label><input value="${esc(stuQ)}" oninput="stuQ=this.value;render()"></div>
  <div><label>Class</label><select onchange="stuCls=this.value;render()"><option value="">All Classes</option>${CLASSES.map(c=>`<option ${stuCls===c?"selected":""}>${c}</option>`).join("")}</select></div></div>
  <table><tr><th>Adm No</th><th>Name</th><th>Father Name</th><th>Class</th><th>Monthly Fee</th><th>Phone</th><th>Dues</th><th></th></tr>
- ${list.map(s=>`<tr><td>${s.adm}</td><td>${esc(s.name)}</td><td>${esc(s.father)}</td><td>${s.cls}</td><td>${money(s.fee)}</td><td>${esc(s.phone)||"—"}</td><td>${dues(s.id)>0?`<span class="pill due">${money(dues(s.id))}</span>`:"—"}</td><td><button class="btn sm ghost" onclick="editStudent('${s.id}')">Edit</button> <button class="btn sm red" onclick="delStudent('${s.id}')">Delete</button></td></tr>`).join("")}</table>
+ ${list.map(s=>`<tr><td>${s.adm}</td><td>${esc(s.name)}</td><td>${esc(s.father)}</td><td>${s.cls}</td><td>${money(s.fee)}</td><td>${esc(s.phone)||"—"}</td><td>${dues(s.id)>0?`<span class="pill due">${money(dues(s.id))}</span>`:"—"}${(s.books||s.fund)?'<div class="small">'+(s.books?('Books '+money(s.books)):'')+(s.books&&s.fund?' · ':'')+(s.fund?('Fund '+money(s.fund)):'')+'</div>':''}</td><td><button class="btn sm ghost" onclick="editStudent('${s.id}')">Edit</button> <button class="btn sm red" onclick="delStudent('${s.id}')">Delete</button></td></tr>`).join("")}</table>
  <div class="box" style="margin-top:12px"><h3>${E?"Edit Student — "+esc(E.name):"New Student"}</h3><div class="grid">
  <div><label>Name</label><input id="ns_name" value="${E?esc(E.name):""}"></div><div><label>Father Name</label><input id="ns_father" value="${E?esc(E.father):""}"></div>
  <div><label>Class</label><select id="ns_cls">${CLASSES.map(c=>`<option ${E&&E.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
  <div><label>Monthly Fee (Rs)</label><input id="ns_fee" type="number" value="${E?E.fee:""}"></div>
- <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div>
+ <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div><div><label>Book Dues (Rs)</label><input id="ns_books" type="number" value="${E?(E.books||0):0}"></div><div><label>Exam Fund Dues (Rs)</label><input id="ns_fund" type="number" value="${E?(E.fund||0):0}"></div>
  <div><label>Phone (Parent — for messages)</label><input id="ns_phone" value="${E?esc(E.phone):""}" placeholder="03XX-XXXXXXX"><button class="btn ghost" type="button" onclick="pickContact('ns_phone')" style="margin-top:6px">Pick from Contacts</button></div></div>
  <p class="small">Sibling discount rule: the child in the highest class pays the full fee; the next 5% less, the third 10%, the fourth 15% — discount on the monthly fee only. Enter the final fee after discount here.</p>
  ${E?`<button class="btn" onclick="saveStudentEdit()">Save Changes</button> <button class="btn ghost" onclick="cancelEdit()">Cancel</button>`:`<button class="btn" onclick="addStudent()">Add Student</button>`}</div>`;
 }
 function addStudent(){const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}
- DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
+ DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,books:+document.getElementById("ns_books").value||0,fund:+document.getElementById("ns_fund").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
 function editStudent(id){editId=id;render();setTimeout(()=>{const el=document.getElementById("ns_phone");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});},50);}
 function cancelEdit(){editId="";render();}
-function saveStudentEdit(){const s=st(editId);if(!s){editId="";render();return;}const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}s.name=n;s.father=document.getElementById("ns_father").value.trim();s.cls=document.getElementById("ns_cls").value;s.fee=+document.getElementById("ns_fee").value||0;s.arrears=+document.getElementById("ns_arr").value||0;s.phone=document.getElementById("ns_phone").value.trim();editId="";save();render();}
+function saveStudentEdit(){const s=st(editId);if(!s){editId="";render();return;}const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}s.name=n;s.father=document.getElementById("ns_father").value.trim();s.cls=document.getElementById("ns_cls").value;s.fee=+document.getElementById("ns_fee").value||0;s.arrears=+document.getElementById("ns_arr").value||0;s.books=+document.getElementById("ns_books").value||0;s.fund=+document.getElementById("ns_fund").value||0;s.phone=document.getElementById("ns_phone").value.trim();editId="";save();render();}
 function delStudent(id){if(!confirm("This student and all their records will be deleted. Continue?"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);save();render();}
 /* ---- Fees ---- */
 function rFees(){
@@ -304,12 +305,12 @@ function rTemplates(){
  <button class="btn ghost" onclick="printNotice()">Parent Notice</button></div></div>`;
 }
 function doPrint(html){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div><div class="frame">${html}</div>`;window.print();}
-function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];const tot=(s.fee||0)+(s.arrears||0);
+function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];const tot=(s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0);
  doPrint(`${ph(HDR_C)}<div class="band">فیس واؤچر</div>
  <table><tr><th>واؤچر نمبر:</th><td>${s.adm}</td><th>مہینہ:</th><td>${mn} ${y}</td></tr>
  <tr><th>طالب علم کا نام:</th><td>${esc(s.name)}</td><th>جماعت:</th><td>${CLS_UR[s.cls]||s.cls}</td></tr>
  <tr><th>ماہانہ فیس:</th><td>${rsu(s.fee)}</td><th>بقایا:</th><td>${rsu(s.arrears)}</td></tr>
- <tr><th>کل واجب الادا:</th><td><b>${rsu(tot)}</b></td><th>آخری تاریخ:</th><td>5 ${mn} ${y}</td></tr></table>
+ ${(s.books||s.fund)?`<tr><th>کتابوں کا بقایا:</th><td>${rsu(s.books||0)}</td><th>امتحانی فنڈ:</th><td>${rsu(s.fund||0)}</td></tr>`:``}<tr><th>کل واجب الادا:</th><td><b>${rsu(tot)}</b></td><th>آخری تاریخ:</th><td>5 ${mn} ${y}</td></tr></table>
  <p class="inst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e${contactPhone()}</p>
  <img class="strip" src="${STRIP}">`);}
 function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);
@@ -364,7 +365,7 @@ function rMessages(){
 }
 /* ---- Backup ---- */
 function rBackup(){
- return `<h2>Backup &amp; Data</h2><div class="box"><h3>School Contact Number</h3><p>This number is printed on fee vouchers as the contact number, and shown in the app header. Change it any time — for example, when the new school SIM arrives.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="set_phone" value="${esc(contactPhone())}" style="flex:1;min-width:180px"><button class="btn" onclick="saveContactPhone()">Save Number</button></div></div><div class="box">
+ return `<h2>Backup &amp; Data</h2><div class="box"><h3>School Contact Number</h3><p>This number is printed on fee vouchers as the contact number, and shown in the app header. Change it any time — for example, when the new school SIM arrives.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="set_phone" value="${esc(contactPhone())}" style="flex:1;min-width:180px"><button class="btn" onclick="saveContactPhone()">Save Number</button></div></div><div class="box"><h3>Exam Fund</h3><p>One tap adds Rs 400 exam-fund dues to every student whose monthly fee is above zero (free or undecided students are skipped). Use it once for each installment — January and June.</p><button class="btn" onclick="addFundAll()">Add Exam Fund Rs 400 to All Students</button></div><div class="box">
  <p>Your data is stored in this phone/computer's browser. Download a backup file regularly and keep it safe — if the phone is changed or damaged, the whole record can be restored from that file.</p>
  <p id="lastBk"></p>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
