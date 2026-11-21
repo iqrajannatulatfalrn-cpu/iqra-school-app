@@ -140,11 +140,11 @@ function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===i
 function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+ (s.fee - paidThisMonth(id)));}
 function esc(x){return String(x??"").replace(/&/g,"&amp;").replace(/</g,"&lt;");}
 /* ============ UI ============ */
-const TABS=[["dash","Dashboard"],["students","Students"],["fees","Fees"],["register","Register"],["attendance","Attendance"],["teachers","Teachers"],["expenses","Expenses"],["results","Results"],["admissions","Admissions 2027"],["templates","Templates"],["backup","Backup"]];
+const TABS=[["dash","Dashboard"],["students","Students"],["fees","Fees"],["register","Register"],["attendance","Attendance"],["teachers","Teachers"],["expenses","Expenses"],["results","Results"],["admissions","Admissions 2027"],["templates","Templates"],["backup","Backup"],["messages","Messages"]];
 let cur="dash", attDate=today(), regMonth=ym(), feeStudent="";
 function renderNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="${cur===t[0]?"on":""}" onclick="go('${t[0]}')">${t[1]}</button>`).join("");}
 function go(t){cur=t;render();}
-function render(){renderNav();fillLastBk();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup};m.innerHTML=(DB.demo?`<div class="note">This is <b>demo data</b> (names are marked "(Demo)"). The live record is still the Excel workbook. When ready, clear the demo from the Backup section and add the real students.</div>`:"")+(R[cur]?R[cur]():"");fillLastBk();}
+function render(){renderNav();fillLastBk();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup,messages:rMessages};m.innerHTML=(DB.demo?`<div class="note">This is <b>demo data</b> (names are marked "(Demo)"). The live record is still the Excel workbook. When ready, clear the demo from the Backup section and add the real students.</div>`:"")+(R[cur]?R[cur]():"");fillLastBk();}
 function classCounts(){return CLASSES.map(c=>[c,DB.students.filter(s=>s.cls===c).length]).filter(x=>x[1]>0);}
 function rDash(){
  const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
@@ -181,7 +181,7 @@ function rStudents(){
 }
 function addStudent(){const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}
  DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
-function editStudent(id){const s=st(id);const fee=prompt("Monthly fee (Rs):",s.fee);if(fee===null)return;const arr=prompt("Old arrears (Rs):",s.arrears);if(arr===null)return;s.fee=+fee||0;s.arrears=+arr||0;save();render();}
+function editStudent(id){const s=st(id);const fee=prompt("Monthly fee (Rs):",s.fee);if(fee===null)return;const arr=prompt("Old arrears (Rs):",s.arrears);if(arr===null)return;const fth=prompt("Father name:",s.father||"");if(fth===null)return;const ph=prompt("Parent phone (for messages):",s.phone||"");if(ph===null)return;s.fee=+fee||0;s.arrears=+arr||0;s.father=fth.trim();s.phone=ph.trim();save();render();}
 function delStudent(id){if(!confirm("This student and all their records will be deleted. Continue?"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);save();render();}
 /* ---- Fees ---- */
 function rFees(){
@@ -331,6 +331,31 @@ function printNotice(){doPrint(`${ph(HDR_A)}<div class="band">اطلاع نام�
  <p style="min-height:160px;border:1px solid #999;padding:10px">متن یہاں لکھیں۔</p>
  <p class="sig">دستخط: پرنسپل (حافظ محمد انس معاویہ)</p>`);}
 
+/* ---- Messages (SMS preparation) ---- */
+function smsLink(num, body){return "sms:"+String(num||"").replace(/[^0-9+]/g,"")+"?&body="+encodeURIComponent(body);}
+function msgAbsent(nm){return "Assalam o Alaikum, "+nm+" aaj school se ghair hazir hai. Agar koi khaas wajah hai to school ko ittila dein. Shukriya. Iqra Jannat-ul-Atfal School, Rasool Nagar";}
+function msgLeave(nm){return "Assalam o Alaikum, "+nm+" ki aaj ki chutti ki darkhwast mil gayi hai. Shukriya. Iqra Jannat-ul-Atfal School, Rasool Nagar";}
+function msgFee(nm, amt){return "Assalam o Alaikum, "+nm+" ki school fee Rs "+Number(amt).toLocaleString("en-US")+" baqaya hai. Barah-e-karam jald ada kar dein. Shukriya. Iqra Jannat-ul-Atfal School, Rasool Nagar";}
+function consecAbsent(id){const ds=[...new Set(DB.attendance.map(a=>a.date))].sort().reverse();let c=0;for(const d of ds){const a=DB.attendance.find(x=>x.studentId===id&&x.date===d);if(!a)continue;if(a.status==="absent")c++;else break;}return c;}
+function msgRow(s, body, callOnly){
+ const has=!!(s.phone&&String(s.phone).trim());
+ if(!has) return `<div>${esc(s.name)} — ${esc(s.cls)} — <span class="pill due">No phone number</span></div>`;
+ return `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:5px 0"><span style="flex:1;min-width:140px">${esc(s.name)} — ${esc(s.cls)} — ${esc(s.phone)}</span><a class="btn sm" href="${smsLink(s.phone, body)}">Send SMS</a><a class="btn sm ghost" href="tel:${esc(s.phone)}">Call</a></div>`;
+}
+function rMessages(){
+ const t=today();
+ const dayA=DB.attendance.filter(a=>a.date===t);
+ const absent=dayA.filter(a=>a.status==="absent").map(a=>st(a.studentId)).filter(Boolean);
+ const leave=dayA.filter(a=>a.status==="leave").map(a=>st(a.studentId)).filter(Boolean);
+ const callList=DB.students.map(s=>({s, c:consecAbsent(s.id)})).filter(x=>x.c>=2);
+ const dueList=DB.students.map(s=>({s, d:dues(s.id)})).filter(x=>x.d>0);
+ return `<h2>Messages — SMS Preparation</h2>
+ <div class="note">Messages open in this phone's SMS app with the text ready — you tap Send there. They go from <b>this phone's SIM</b>. <b>Check every list carefully before sending</b> — one wrong absence message can break a parent's trust.</div>
+ <div class="box"><h3>Absent Today (${t}) — ${absent.length}</h3>${absent.length?absent.map(s=>msgRow(s, msgAbsent(s.name))).join(""):"<p>No absences recorded today.</p>"}</div>
+ <div class="box"><h3>On Leave Today — ${leave.length}</h3>${leave.length?leave.map(s=>msgRow(s, msgLeave(s.name))).join(""):"<p>No leaves recorded today.</p>"}</div>
+ <div class="box"><h3>Call List — Absent 2+ Days in a Row (${callList.length})</h3><p class="small">Call these homes today (a human call — not a message).</p>${callList.length?callList.map(x=>`<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;margin:5px 0"><span style="flex:1;min-width:140px">${esc(x.s.name)} — ${esc(x.s.cls)} — absent ${x.c} days — ${esc(x.s.phone||"")}</span>${x.s.phone?`<a class="btn sm" href="tel:${esc(x.s.phone)}">Call Now</a>`:`<span class="pill due">No phone number</span>`}</div>`).join(""):"<p>No one to call today.</p>"}</div>
+ <div class="box"><h3>Fee Reminders — ${dueList.length} with dues</h3>${dueList.length?dueList.map(x=>msgRow(x.s, msgFee(x.s.name, x.d))).join(""):"<p>No dues.</p>"}</div>`;
+}
 /* ---- Backup ---- */
 function rBackup(){
  return `<h2>Backup &amp; Data</h2><div class="box">
