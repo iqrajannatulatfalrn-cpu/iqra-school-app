@@ -162,26 +162,29 @@ function rDash(){
  <div class="box"><h3>Students with Dues</h3>${DB.students.filter(s=>dues(s.id)>0).map(s=>`<div>${esc(s.name)} — ${esc(s.cls)} — <b>${money(dues(s.id))}</b></div>`).join("")||"No dues"}</div>`;
 }
 /* ---- Students ---- */
-let stuQ="",stuCls="";
+let stuQ="",stuCls="",editId="";
 function rStudents(){
+ if(editId&&!st(editId))editId="";const E=editId?st(editId):null;
  let list=DB.students.filter(s=>(!stuCls||s.cls===stuCls)&&(!stuQ||s.name.includes(stuQ)||s.adm.includes(stuQ)));
  return `<h2>Students (${DB.students.length})</h2>
  <div class="row"><div><label>Search (Name / Adm No)</label><input value="${esc(stuQ)}" oninput="stuQ=this.value;render()"></div>
  <div><label>Class</label><select onchange="stuCls=this.value;render()"><option value="">All Classes</option>${CLASSES.map(c=>`<option ${stuCls===c?"selected":""}>${c}</option>`).join("")}</select></div></div>
- <table><tr><th>Adm No</th><th>Name</th><th>Father Name</th><th>Class</th><th>Monthly Fee</th><th>Dues</th><th></th></tr>
- ${list.map(s=>`<tr><td>${s.adm}</td><td>${esc(s.name)}</td><td>${esc(s.father)}</td><td>${s.cls}</td><td>${money(s.fee)}</td><td>${dues(s.id)>0?`<span class="pill due">${money(dues(s.id))}</span>`:"—"}</td><td><button class="btn sm ghost" onclick="editStudent('${s.id}')">Edit</button> <button class="btn sm red" onclick="delStudent('${s.id}')">Delete</button></td></tr>`).join("")}</table>
- <div class="box" style="margin-top:12px"><h3>New Student</h3><div class="grid">
- <div><label>Name</label><input id="ns_name"></div><div><label>Father Name</label><input id="ns_father"></div>
- <div><label>Class</label><select id="ns_cls">${CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div>
- <div><label>Monthly Fee (Rs)</label><input id="ns_fee" type="number"></div>
- <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="0"></div>
- <div><label>Phone</label><input id="ns_phone"></div></div>
+ <table><tr><th>Adm No</th><th>Name</th><th>Father Name</th><th>Class</th><th>Monthly Fee</th><th>Phone</th><th>Dues</th><th></th></tr>
+ ${list.map(s=>`<tr><td>${s.adm}</td><td>${esc(s.name)}</td><td>${esc(s.father)}</td><td>${s.cls}</td><td>${money(s.fee)}</td><td>${esc(s.phone)||"—"}</td><td>${dues(s.id)>0?`<span class="pill due">${money(dues(s.id))}</span>`:"—"}</td><td><button class="btn sm ghost" onclick="editStudent('${s.id}')">Edit</button> <button class="btn sm red" onclick="delStudent('${s.id}')">Delete</button></td></tr>`).join("")}</table>
+ <div class="box" style="margin-top:12px"><h3>${E?"Edit Student — "+esc(E.name):"New Student"}</h3><div class="grid">
+ <div><label>Name</label><input id="ns_name" value="${E?esc(E.name):""}"></div><div><label>Father Name</label><input id="ns_father" value="${E?esc(E.father):""}"></div>
+ <div><label>Class</label><select id="ns_cls">${CLASSES.map(c=>`<option ${E&&E.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
+ <div><label>Monthly Fee (Rs)</label><input id="ns_fee" type="number" value="${E?E.fee:""}"></div>
+ <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div>
+ <div><label>Phone (Parent — for messages)</label><input id="ns_phone" value="${E?esc(E.phone):""}" placeholder="03XX-XXXXXXX"></div></div>
  <p class="small">Sibling discount rule: the child in the highest class pays the full fee; the next 5% less, the third 10%, the fourth 15% — discount on the monthly fee only. Enter the final fee after discount here.</p>
- <button class="btn" onclick="addStudent()">Add Student</button></div>`;
+ ${E?`<button class="btn" onclick="saveStudentEdit()">Save Changes</button> <button class="btn ghost" onclick="cancelEdit()">Cancel</button>`:`<button class="btn" onclick="addStudent()">Add Student</button>`}</div>`;
 }
 function addStudent(){const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}
  DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
-function editStudent(id){const s=st(id);const fee=prompt("Monthly fee (Rs):",s.fee);if(fee===null)return;const arr=prompt("Old arrears (Rs):",s.arrears);if(arr===null)return;const fth=prompt("Father name:",s.father||"");if(fth===null)return;const ph=prompt("Parent phone (for messages):",s.phone||"");if(ph===null)return;s.fee=+fee||0;s.arrears=+arr||0;s.father=fth.trim();s.phone=ph.trim();save();render();}
+function editStudent(id){editId=id;render();setTimeout(()=>{const el=document.getElementById("ns_phone");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});},50);}
+function cancelEdit(){editId="";render();}
+function saveStudentEdit(){const s=st(editId);if(!s){editId="";render();return;}const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}s.name=n;s.father=document.getElementById("ns_father").value.trim();s.cls=document.getElementById("ns_cls").value;s.fee=+document.getElementById("ns_fee").value||0;s.arrears=+document.getElementById("ns_arr").value||0;s.phone=document.getElementById("ns_phone").value.trim();editId="";save();render();}
 function delStudent(id){if(!confirm("This student and all their records will be deleted. Continue?"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);save();render();}
 /* ---- Fees ---- */
 function rFees(){
