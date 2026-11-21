@@ -137,7 +137,7 @@ function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;}
 function st(id){return DB.students.find(s=>s.id===id);}
 function contactPhone(){return (DB.settings&&DB.settings.contactPhone)||"0334-8169037";}
 function saveContactPhone(){const v=document.getElementById("set_phone").value.trim();if(!v){alert("Please enter a number");return;}DB.settings={contactPhone:v};save();render();alert("Contact number saved: "+v);}
-function addFundAll(){const list=DB.students.filter(s=>(s.fee||0)>0);if(!confirm("Add Rs 400 exam-fund dues to "+list.length+" students?"))return;list.forEach(s=>{s.fund=(s.fund||0)+400;});save();alert("Exam fund added to "+list.length+" students.");}
+function addFundAll(){const list=DB.students.filter(s=>(s.fee||0)>0);if(!confirm("Set exam-fund dues to Rs 800 for "+list.length+" students?"))return;list.forEach(s=>{s.fund=800;});save();alert("Exam fund set to Rs 800 for "+list.length+" students.");}
 async function pickContact(fid){if(!navigator.contacts||!navigator.contacts.select){alert("Contact picker is not available in this browser — please type the number");return;}try{const cs=await navigator.contacts.select(["tel"],{multiple:false});if(cs&&cs.length&&cs[0].tel&&cs[0].tel.length)document.getElementById(fid).value=cs[0].tel[0];}catch(e){}}
 function paidThisMonth(id,m){m=m||ym();return DB.payments.filter(p=>p.studentId===id&&ym(p.date)===m).reduce((a,p)=>a+p.amount,0);}
 function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===id&&a.status==="absent"&&ym(a.date)===m).length;}
@@ -367,7 +367,7 @@ function rMessages(){
 }
 /* ---- Backup ---- */
 function rBackup(){
- return `<h2>Backup &amp; Data</h2><div class="box"><h3>School Contact Number</h3><p>This number is printed on fee vouchers as the contact number, and shown in the app header. Change it any time — for example, when the new school SIM arrives.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="set_phone" value="${esc(contactPhone())}" style="flex:1;min-width:180px"><button class="btn" onclick="saveContactPhone()">Save Number</button></div></div><div class="box"><h3>Exam Fund</h3><p>One tap adds Rs 400 exam-fund dues to every student whose monthly fee is above zero (free or undecided students are skipped). Use it once for each installment — January and June.</p><button class="btn" onclick="addFundAll()">Add Exam Fund Rs 400 to All Students</button></div><div class="box">
+ return `<h2>Backup &amp; Data</h2><div class="box"><h3>School Contact Number</h3><p>This number is printed on fee vouchers as the contact number, and shown in the app header. Change it any time — for example, when the new school SIM arrives.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="set_phone" value="${esc(contactPhone())}" style="flex:1;min-width:180px"><button class="btn" onclick="saveContactPhone()">Save Number</button></div></div><div class="box"><h3>Exam Fund</h3><p>One tap sets the exam-fund dues to Rs 800 (the full year) for every student whose monthly fee is above zero (free or undecided students are skipped).</p><button class="btn" onclick="addFundAll()">Set Exam Fund Rs 800 for All Students</button></div><div class="box">
  <p>Your data is stored in this phone/computer's browser. Download a backup file regularly and keep it safe — if the phone is changed or damaged, the whole record can be restored from that file.</p>
  <p id="lastBk"></p>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
