@@ -90,7 +90,7 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
 <header>
 <img id="logoImg" alt="School logo">
 <div class="htext"><h1>IQRA JANNAT-UL-ATFAL SCHOOL &amp; ACADEMY</h1>
-<p>Rasool Nagar, District Wazirabad — School Management System | WhatsApp: 0334-8169037</p>
+<p>Rasool Nagar, District Wazirabad — School Management System | WhatsApp: <span id="hdrPhone">0334-8169037</span></p>
 <p class="slogan">تعلیم کو عزت دو</p></div>
 </header>
 <div id="bkWarn" style="display:none;background:#FFF3CD;border-bottom:2px solid #E0A800;color:#5C4300;padding:10px 14px;font-size:16px;text-align:center">
@@ -132,9 +132,11 @@ function seed(){
  ["31 December: Results & parent conference — re-admission confirmation of old students","1 January 2027: Open admissions — pinned post and flyer distribution","Ask parents for referrals (one name per family)","Check the inquiry register daily and make follow-up calls","10 January 2027: New classes begin"].forEach((x,i)=>DB.planTasks.push({id:uid()+"k"+i,text:x,done:i<1}));
  save();
 }
-function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;} if(!DB||!DB.students) seed(); else {DB.students.forEach(s=>{if(CLS_EN[s.cls])s.cls=CLS_EN[s.cls];}); (DB.inquiries||[]).forEach(i=>{if(CLS_EN[i.cls])i.cls=CLS_EN[i.cls];});}}
+function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;} if(!DB||!DB.students) seed(); else {DB.students.forEach(s=>{if(CLS_EN[s.cls])s.cls=CLS_EN[s.cls];}); (DB.inquiries||[]).forEach(i=>{if(CLS_EN[i.cls])i.cls=CLS_EN[i.cls];});} if(!DB.settings||!DB.settings.contactPhone)DB.settings={contactPhone:"0334-8169037"};}
 /* ============ HELPERS ============ */
 function st(id){return DB.students.find(s=>s.id===id);}
+function contactPhone(){return (DB.settings&&DB.settings.contactPhone)||"0334-8169037";}
+function saveContactPhone(){const v=document.getElementById("set_phone").value.trim();if(!v){alert("Please enter a number");return;}DB.settings={contactPhone:v};save();render();alert("Contact number saved: "+v);}
 function paidThisMonth(id,m){m=m||ym();return DB.payments.filter(p=>p.studentId===id&&ym(p.date)===m).reduce((a,p)=>a+p.amount,0);}
 function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===id&&a.status==="absent"&&ym(a.date)===m).length;}
 function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+ (s.fee - paidThisMonth(id)));}
@@ -144,7 +146,7 @@ const TABS=[["dash","Dashboard"],["students","Students"],["fees","Fees"],["regis
 let cur="dash", attDate=today(), regMonth=ym(), feeStudent="";
 function renderNav(){document.getElementById("nav").innerHTML=TABS.map(t=>`<button class="${cur===t[0]?"on":""}" onclick="go('${t[0]}')">${t[1]}</button>`).join("");}
 function go(t){cur=t;render();}
-function render(){renderNav();fillLastBk();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup,messages:rMessages};m.innerHTML=(DB.demo?`<div class="note">This is <b>demo data</b> (names are marked "(Demo)"). The live record is still the Excel workbook. When ready, clear the demo from the Backup section and add the real students.</div>`:"")+(R[cur]?R[cur]():"");fillLastBk();}
+function render(){const hp=document.getElementById("hdrPhone");if(hp&&DB)hp.textContent=contactPhone();renderNav();fillLastBk();const m=document.getElementById("main");const R={dash:rDash,students:rStudents,fees:rFees,register:rRegister,attendance:rAttendance,teachers:rTeachers,expenses:rExpenses,results:rResults,admissions:rAdmissions,templates:rTemplates,backup:rBackup,messages:rMessages};m.innerHTML=(DB.demo?`<div class="note">This is <b>demo data</b> (names are marked "(Demo)"). The live record is still the Excel workbook. When ready, clear the demo from the Backup section and add the real students.</div>`:"")+(R[cur]?R[cur]():"");fillLastBk();}
 function classCounts(){return CLASSES.map(c=>[c,DB.students.filter(s=>s.cls===c).length]).filter(x=>x[1]>0);}
 function rDash(){
  const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
@@ -307,7 +309,7 @@ function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now
  <tr><th>طالب علم کا نام:</th><td>${esc(s.name)}</td><th>جماعت:</th><td>${CLS_UR[s.cls]||s.cls}</td></tr>
  <tr><th>ماہانہ فیس:</th><td>${rsu(s.fee)}</td><th>بقایا:</th><td>${rsu(s.arrears)}</td></tr>
  <tr><th>کل واجب الادا:</th><td><b>${rsu(tot)}</b></td><th>آخری تاریخ:</th><td>5 ${mn} ${y}</td></tr></table>
- <p class="inst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e0334-8169037</p>
+ <p class="inst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e${contactPhone()}</p>
  <img class="strip" src="${STRIP}">`);}
 function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);
  doPrint(`${ph(HDR_C)}<div class="band">فیس رسید</div>
@@ -361,7 +363,7 @@ function rMessages(){
 }
 /* ---- Backup ---- */
 function rBackup(){
- return `<h2>Backup &amp; Data</h2><div class="box">
+ return `<h2>Backup &amp; Data</h2><div class="box"><h3>School Contact Number</h3><p>This number is printed on fee vouchers as the contact number, and shown in the app header. Change it any time — for example, when the new school SIM arrives.</p><div style="display:flex;gap:8px;flex-wrap:wrap"><input id="set_phone" value="${esc(contactPhone())}" style="flex:1;min-width:180px"><button class="btn" onclick="saveContactPhone()">Save Number</button></div></div><div class="box">
  <p>Your data is stored in this phone/computer's browser. Download a backup file regularly and keep it safe — if the phone is changed or damaged, the whole record can be restored from that file.</p>
  <p id="lastBk"></p>
  <div style="display:flex;gap:8px;flex-wrap:wrap">
