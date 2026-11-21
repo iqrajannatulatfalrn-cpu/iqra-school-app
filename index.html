@@ -137,6 +137,7 @@ function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;}
 function st(id){return DB.students.find(s=>s.id===id);}
 function contactPhone(){return (DB.settings&&DB.settings.contactPhone)||"0334-8169037";}
 function saveContactPhone(){const v=document.getElementById("set_phone").value.trim();if(!v){alert("Please enter a number");return;}DB.settings={contactPhone:v};save();render();alert("Contact number saved: "+v);}
+async function pickContact(fid){if(!navigator.contacts||!navigator.contacts.select){alert("Contact picker is not available in this browser — please type the number");return;}try{const cs=await navigator.contacts.select(["tel"],{multiple:false});if(cs&&cs.length&&cs[0].tel&&cs[0].tel.length)document.getElementById(fid).value=cs[0].tel[0];}catch(e){}}
 function paidThisMonth(id,m){m=m||ym();return DB.payments.filter(p=>p.studentId===id&&ym(p.date)===m).reduce((a,p)=>a+p.amount,0);}
 function fineDays(id,m){m=m||ym();return DB.attendance.filter(a=>a.studentId===id&&a.status==="absent"&&ym(a.date)===m).length;}
 function dues(id){const s=st(id);return Math.max(0,(s.arrears||0)+ (s.fee - paidThisMonth(id)));}
@@ -178,7 +179,7 @@ function rStudents(){
  <div><label>Class</label><select id="ns_cls">${CLASSES.map(c=>`<option ${E&&E.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
  <div><label>Monthly Fee (Rs)</label><input id="ns_fee" type="number" value="${E?E.fee:""}"></div>
  <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div>
- <div><label>Phone (Parent — for messages)</label><input id="ns_phone" value="${E?esc(E.phone):""}" placeholder="03XX-XXXXXXX"></div></div>
+ <div><label>Phone (Parent — for messages)</label><input id="ns_phone" value="${E?esc(E.phone):""}" placeholder="03XX-XXXXXXX"><button class="btn ghost" type="button" onclick="pickContact('ns_phone')" style="margin-top:6px">Pick from Contacts</button></div></div>
  <p class="small">Sibling discount rule: the child in the highest class pays the full fee; the next 5% less, the third 10%, the fourth 15% — discount on the monthly fee only. Enter the final fee after discount here.</p>
  ${E?`<button class="btn" onclick="saveStudentEdit()">Save Changes</button> <button class="btn ghost" onclick="cancelEdit()">Cancel</button>`:`<button class="btn" onclick="addStudent()">Add Student</button>`}</div>`;
 }
@@ -277,7 +278,7 @@ function rAdmissions(){
  <div class="box"><h3>Plan Checklist</h3>${DB.planTasks.map(t=>`<div><label style="display:flex;gap:8px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" style="width:auto" ${t.done?"checked":""} onchange="toggleTask('${t.id}')"> ${esc(t.text)}</label></div>`).join("")}</div>
  <div class="box"><h3>Inquiry Register</h3><table><tr><th>Date</th><th>Name</th><th>Class</th><th>Phone</th><th>Status</th></tr>
  ${DB.inquiries.map(i=>`<tr><td>${i.date}</td><td>${esc(i.name)}</td><td>${i.cls}</td><td>${esc(i.phone)}</td><td><select onchange="setInq('${i.id}',this.value)">${["New","Contacted","Visited","Admitted"].map(x=>`<option ${i.status===x?"selected":""}>${x}</option>`).join("")}</select></td></tr>`).join("")}</table>
- <div class="grid" style="margin-top:10px"><div><label>Name</label><input id="nq_name"></div><div><label>Class</label><select id="nq_cls">${CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div><div><label>Phone</label><input id="nq_phone"></div></div>
+ <div class="grid" style="margin-top:10px"><div><label>Name</label><input id="nq_name"></div><div><label>Class</label><select id="nq_cls">${CLASSES.map(c=>`<option>${c}</option>`).join("")}</select></div><div><label>Phone</label><input id="nq_phone"><button class="btn ghost" type="button" onclick="pickContact('nq_phone')" style="margin-top:6px">Pick from Contacts</button></div></div>
  <div style="margin-top:10px"><button class="btn" onclick="addInq()">Add Inquiry</button></div></div>`;
 }
 function toggleTask(id){const t=DB.planTasks.find(x=>x.id===id);t.done=!t.done;save();render();}
