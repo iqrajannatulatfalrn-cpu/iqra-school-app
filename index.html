@@ -70,6 +70,22 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
  #printArea .sig{text-align:left;margin-top:14px}
  #printArea .inst{font-size:12.5px;margin-top:7px}
  #printArea .strip{width:100%;margin-top:6px}
+ #printArea .vslip{padding:2px 2px 0;break-inside:avoid}
+ #printArea .vslip table{border-collapse:collapse;background:transparent}
+ #printArea .vslip th,#printArea .vslip td{border:none;padding:0 2px;text-align:right;background:transparent;font-size:14px}
+ #printArea .vlogo{width:38px;height:38px;object-fit:contain}
+ #printArea .vsname{font-size:16.5px;font-weight:700;color:#0E5B3C;line-height:1.5}
+ #printArea .vtag{background:#0E5B3C;color:#fff;font-size:13px;line-height:1.6;padding:0 10px;text-align:center;white-space:nowrap}
+ #printArea .vmeta{font-size:11.5px;line-height:1.55;color:#333;white-space:nowrap;text-align:left}
+ #printArea .vstu td{font-size:14px;line-height:1.6}
+ #printArea .vk{color:#555;font-size:11.5px}
+ #printArea .vchg td{font-size:13.5px;line-height:1.6;white-space:nowrap}
+ #printArea .vamt{font-weight:700}
+ #printArea .vtot{text-align:left}
+ #printArea .vtot span{border:1.5px solid #0E5B3C;background:#E4EFE7;color:#0E5B3C;font-size:15.5px;font-weight:700;padding:0 10px;white-space:nowrap}
+ #printArea .vinst{font-size:11px;line-height:1.55;color:#444;margin:1px 0 0}
+ #printArea .vsig{text-align:left;font-size:13.5px;margin-top:8px}
+ #printArea .vcut{border-top:1.5px dashed #9a9a9a;margin:7px 0 5px}
 }
 
 #lockScr{position:fixed;inset:0;background:linear-gradient(160deg,#1F5C3D,#123B26);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px}
@@ -300,6 +316,7 @@ function rTemplates(){
  <div><label>Select Student</label><select id="tp_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div></div>
  <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
  <button class="btn" onclick="printVoucher(document.getElementById('tp_stu').value)">Fee Voucher</button>
+ <button class="btn" onclick="printAllVouchers()">Print All Vouchers</button>
  <button class="btn gold" onclick="printResultCard(document.getElementById('tp_stu').value)">Result Card</button></div></div>
  <div class="box"><h3>Blank Forms</h3><div style="display:flex;gap:8px;flex-wrap:wrap">
  <button class="btn ghost" onclick="printAdmissionForm()">Admission Form</button>
@@ -307,19 +324,24 @@ function rTemplates(){
  <button class="btn ghost" onclick="printNotice()">Parent Notice</button></div></div>`;
 }
 function doPrint(html){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div><div class="frame">${html}</div>`;window.print();}
-function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];const tot=(s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0);
- doPrint(`${ph(HDR_C)}<div class="band">فیس واؤچر</div>
- <table><tr><th>واؤچر نمبر:</th><td>${s.adm}</td><th>مہینہ:</th><td>${mn} ${y}</td></tr>
- <tr><th>طالب علم کا نام:</th><td>${esc(s.name)}</td><th>جماعت:</th><td>${CLS_UR[s.cls]||s.cls}</td></tr>
- <tr><th>ماہانہ فیس:</th><td>${rsu(s.fee)}</td><th>بقایا:</th><td>${rsu(s.arrears)}</td></tr>
- ${(s.books||s.fund)?`<tr><th>کتابوں کا بقایا:</th><td>${rsu(s.books||0)}</td><th>امتحانی فنڈ:</th><td>${rsu(s.fund||0)}</td></tr>`:``}<tr><th>کل واجب الادا:</th><td><b>${rsu(tot)}</b></td><th>آخری تاریخ:</th><td>5 ${mn} ${y}</td></tr></table>
- <p class="inst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e${contactPhone()}</p>
- <img class="strip" src="${STRIP}">`);}
+function doPrintSlips(html){document.getElementById("printArea").innerHTML=html;window.print();}
+function voucherSlip(s,mn,y){const tot=(s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0);
+ const chg=[["ماہانہ فیس",s.fee||0],["پرانا بقایا",s.arrears||0],["کتابوں کا بقایا",s.books||0],["امتحانی فنڈ",s.fund||0]].filter(c=>c[1]>0);
+ return `<div class="vslip"><table><tr><td style="width:42px"><img class="vlogo" src="${LOGO}"></td><td class="vsname">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی، رسول نگر</td><td style="width:92px"><div class="vtag">فیس واؤچر</div></td><td class="vmeta" style="width:170px">نمبر: ${s.adm}<br>مہینہ: ${mn} ${y}</td></tr></table>
+ <table class="vstu"><tr><td><span class="vk">طالب علم: </span><b>${esc(s.name)}</b></td><td><span class="vk">جماعت: </span><b>${CLS_UR[s.cls]||s.cls}</b></td><td><span class="vk">آخری تاریخ: </span><b>5 ${mn} ${y}</b></td></tr></table>
+ <table class="vchg"><tr>${chg.map(c=>`<td><span class="vk">${c[0]}: </span><span class="vamt">${Number(c[1]).toLocaleString("en-US")}</span></td>`).join("")}<td class="vtot"><span>کل: ${rsu(tot)}</span></td></tr></table>
+ <p class="vinst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e${contactPhone()}</p></div>`;}
+function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];doPrintSlips(voucherSlip(s,mn,y));}
+function printAllVouchers(){const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];
+ const list=DB.students.filter(s=>((s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0))>0);
+ if(!list.length){alert("No vouchers to print");return;}
+ doPrintSlips(list.map((s,i)=>(i?`<div class="vcut"></div>`:"")+voucherSlip(s,mn,y)).join(""));}
 function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);
- doPrint(`${ph(HDR_C)}<div class="band">فیس رسید</div>
- <table><tr><th>تاریخ</th><td>${p.date}</td><th>نام</th><td>${esc(s?s.name:"")}</td></tr>
- <tr><th>جماعت</th><td>${s?(CLS_UR[s.cls]||s.cls):""}</td><th>وصول شدہ رقم</th><td>${rsu(p.amount)}</td></tr></table>
- <p class="sig">دستخط: پرنسپل</p>`);}
+ doPrintSlips(`<div class="vslip"><table><tr><td style="width:42px"><img class="vlogo" src="${LOGO}"></td><td class="vsname">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی، رسول نگر</td><td style="width:92px"><div class="vtag">فیس رسید</div></td><td class="vmeta" style="width:170px">تاریخ: ${p.date}</td></tr></table>
+ <table class="vstu"><tr><td><span class="vk">طالب علم: </span><b>${esc(s?s.name:"")}</b></td><td><span class="vk">جماعت: </span><b>${s?(CLS_UR[s.cls]||s.cls):""}</b></td><td><span class="vk">داخلہ نمبر: </span><b>${s?s.adm:""}</b></td></tr></table>
+ <table class="vchg"><tr><td><span class="vk">وصول شدہ رقم</span></td><td class="vtot"><span>${rsu(p.amount)}</span></td></tr></table>
+ <p class="vinst">یہ رسید فیس کی وصولی کا ثبوت ہے — سنبھال کر رکھیں۔ رابطہ: \u200e${contactPhone()}</p>
+ <p class="vsig">دستخط: پرنسپل</p></div>`);}
 function printResultCard(id){const s=st(id);if(!s)return;const rs=DB.results.filter(r=>r.studentId===id&&r.exam===resExam);
  const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=tt?Math.round(ob/tt*100):0;const g=pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":"E";
  doPrint(`${ph(HDR_R)}<div class="band">رزلٹ کارڈ — ${esc(resExam)}</div>
