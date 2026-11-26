@@ -70,21 +70,80 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
  #printArea .sig{text-align:left;margin-top:14px}
  #printArea .inst{font-size:12.5px;margin-top:7px}
  #printArea .strip{width:100%;margin-top:6px}
- #printArea .vslip{padding:2px 2px 0;break-inside:avoid}
- #printArea .vslip table{border-collapse:collapse;background:transparent}
- #printArea .vslip th,#printArea .vslip td{border:none;padding:0 2px;text-align:right;background:transparent;font-size:14px}
- #printArea .vlogo{width:38px;height:38px;object-fit:contain}
- #printArea .vsname{font-size:16.5px;font-weight:700;color:#0E5B3C;line-height:1.5}
- #printArea .vtag{background:#0E5B3C;color:#fff;font-size:13px;line-height:1.6;padding:0 10px;text-align:center;white-space:nowrap}
- #printArea .vmeta{font-size:11.5px;line-height:1.55;color:#333;white-space:nowrap;text-align:left}
- #printArea .vstu td{font-size:14px;line-height:1.6}
- #printArea .vk{color:#555;font-size:11.5px}
- #printArea .vchg td{font-size:13.5px;line-height:1.6;white-space:nowrap}
- #printArea .vamt{font-weight:700}
- #printArea .vtot{text-align:left}
- #printArea .vtot span{border:1.5px solid #0E5B3C;background:#E4EFE7;color:#0E5B3C;font-size:15.5px;font-weight:700;padding:0 10px;white-space:nowrap}
- #printArea .vinst{font-size:11px;line-height:1.55;color:#444;margin:1px 0 0}
- #printArea .vsig{text-align:left;font-size:13.5px;margin-top:8px}
+ #printArea .fh{width:100%}
+ #printArea .fh td{border:none;padding:0 2px;text-align:right;background:transparent}
+ #printArea .fname{font-size:19px;font-weight:700;color:#0E5B3C;line-height:1.5}
+ #printArea .faddr{font-size:11.5px;color:#444;line-height:1.5}
+ #printArea .ftag{background:#1F5C3D;color:#fff;font-size:15px;font-weight:700;line-height:1.6;padding:2px 0 5px;text-align:center}
+ #printArea .fslip{border:3px solid #1F5C3D;outline:1px solid #C9A227;outline-offset:3px;padding:10px 12px;margin-bottom:8px;break-inside:avoid}
+ #printArea .fid td{border:none;font-size:13.5px;padding:2px 4px;text-align:right;background:transparent}
+ #printArea .fchg td{border:none;font-size:14.5px;padding:2px 4px;text-align:right;background:transparent}
+ #printArea .fchg .fa{font-weight:700}
+ #printArea .fchg .ftot{background:#1F3864;color:#fff;font-weight:700;text-align:center;font-size:15px;width:30%}
+ #printArea .frow2{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:6px}
+ #printArea .finst{font-size:11.5px;color:#444;flex:1;margin:0;line-height:1.6}
+ #printArea .frecv{border:1.5px solid #1F5C3D;width:150px;height:42px;position:relative;flex:none}
+ #printArea .frecv span{position:absolute;top:1px;right:6px;font-size:11px;color:#1F5C3D}
+ #printArea .fcut{border-top:1.5px dashed #9a9a9a;margin:9px 0}
+ #printArea .fsig{font-size:13.5px;margin-top:10px;text-align:right}
+ #printArea .idstrip{display:flex;gap:6px;margin:6px 0}
+ #printArea .idstrip>div{flex:1;background:#E4EFE7;border:1px solid #B9CDBD;padding:3px 8px 6px;text-align:center}
+ #printArea .idstrip span{display:block;font-size:11px;color:#1F5C3D}
+ #printArea .idstrip b{font-size:14.5px;color:#1F3864}
+ #printArea .sumrow{display:flex;gap:6px;margin:6px 0}
+ #printArea .sumrow>div{flex:1;background:#fff;border:1.5px solid #1F3864;padding:3px 8px 6px;text-align:center}
+ #printArea .sumrow span{display:block;font-size:11px;color:#1F5C3D}
+ #printArea .sumrow b{font-size:15px;color:#1F3864}
+ #printArea .dhead{background:#1F3864;color:#fff;font-weight:700;padding:2px 8px 5px;margin-top:8px;font-size:14.5px}
+ #printArea .drow{display:flex;gap:6px;margin-top:5px}
+ #printArea .drow>div{flex:1;border:1px solid #C9A227;background:#FBF6E3;padding:3px 6px 6px;text-align:center}
+ #printArea .drow.arow>div{border-color:#B9CDBD;background:#EEF4EF}
+ #printArea .drow span{display:block;font-size:11.5px}
+ #printArea .drow b{font-size:15px;color:#1F3864}
+ #printArea .opbox{border:1px solid #999;padding:6px 9px;margin-top:8px;font-size:13.5px;line-height:1.9}
+ #printArea .fscale{font-size:11px;color:#555;margin-top:3px}
+ #printArea .fsigs{margin-top:14px}
+ #printArea .fsigs td{border:none;text-align:center;font-size:12.5px;color:#1F5C3D;font-weight:700;background:transparent}
+ #printArea .sgn{display:inline-block;border-top:1.5px solid #777;padding:3px 16px 0;margin-top:14px}
+ #printArea .fnote{font-size:12.5px;color:#444;line-height:1.8}
+ #printArea .goldbox{border:1.5px solid #C9A227;background:#FBF6E3;padding:6px 10px;margin:7px 0;font-size:13.5px;line-height:1.9}
+ #printArea .npara{font-size:14.5px;line-height:2.1;text-align:justify;margin:6px 0}
+ #printArea .npoint{font-size:13.5px;margin:3px 0}
+ #printArea .nsubj{font-size:15px;margin:8px 0 2px}
+ #printArea .ackbox{border:1.5px solid #1F3864;margin-top:8px}
+ #printArea .ackhead{background:#1F3864;color:#fff;text-align:center;font-weight:700;font-size:13.5px;padding:3px 0 6px}
+ #printArea .ackrow{padding:8px 10px;font-size:13px}
+ #printArea .aff{display:inline-block;margin:5px 8px 5px 0;font-size:13.5px}
+ #printArea .aff i{display:inline-block;border-bottom:1px solid #777;height:12px}
+ #printArea .afrow{display:flex;justify-content:space-between;margin:6px 0;font-size:13px}
+ #printArea .afrow i{display:inline-block;border-bottom:1px solid #777;width:110px;height:12px}
+ #printArea .afband{background:#2E3A59;color:#fff;display:flex;justify-content:space-between;padding:3px 9px 6px;margin:9px 0 4px;font-weight:700;font-size:14px}
+ #printArea .afband2{background:#2E3A59;color:#fff;text-align:center;padding:3px 8px 6px;margin:7px 0;font-weight:700;font-size:13.5px}
+ #printArea .afnote{font-size:11.5px;color:#555;margin:2px 0}
+ #printArea .afgrid td{border:none}
+ #printArea .afphoto{border:1.5px solid #2E3A59;text-align:center;vertical-align:middle;color:#555;width:90px;height:115px}
+ #printArea .afbox{border:1.5px solid #2E3A59;padding:10px 12px;margin-bottom:12px}
+ #printArea .afbox h3{text-align:center;color:#2E3A59;margin:2px 0;font-size:16px}
+ #printArea .afsub{text-align:center;font-size:12.5px;color:#333}
+ #printArea .afrule{font-size:13px;margin:4px 0;line-height:1.9}
+ #printArea .idsheet{display:flex;flex-wrap:wrap;gap:8mm;justify-content:center;direction:ltr}
+ #printArea .idcard{width:85.6mm;height:54mm;border:1.5px solid #1F3864;border-radius:3mm;overflow:hidden;position:relative;font-family:'Segoe UI',Arial,sans-serif;direction:ltr;color:#000;background:#fff;break-inside:avoid}
+ #printArea .idtop{background:#1F3864;color:#fff;text-align:center;font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:15px;padding:2mm 1mm 3mm;line-height:1.6}
+ #printArea .iden{text-align:center;font-size:6.2pt;letter-spacing:.4px;padding:1mm 0 0;font-weight:600}
+ #printArea .idgold{background:#C9A227;color:#1F3864;text-align:center;font-size:7.5pt;font-weight:700;padding:.8mm 0;margin-top:1mm}
+ #printArea .idbody{display:flex;gap:3mm;padding:2.5mm 3mm 0}
+ #printArea .idphoto{width:19mm;height:23mm;border:1.2px solid #999;display:flex;align-items:center;justify-content:center;font-size:7pt;color:#888;flex:none}
+ #printArea .iddet{flex:1}
+ #printArea .iddet>div{display:flex;gap:2mm;margin-bottom:1.6mm;font-size:8pt}
+ #printArea .iddet span{width:15mm;color:#1F3864;font-weight:700;flex:none}
+ #printArea .idslogan{position:absolute;bottom:0;left:0;right:0;background:#1F5C3D;color:#fff;text-align:center;font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:11px;padding:1mm 0 2mm}
+ #printArea .idbhead{background:#1F3864;color:#fff;text-align:center;font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:13.5px;padding:2mm 1mm 3mm;line-height:1.6}
+ #printArea .idnote{margin:2.5mm 3mm;background:#FBF6E3;border:1px solid #C9A227;font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:11.5px;text-align:center;padding:1.5mm 1mm 2.5mm;direction:rtl;line-height:1.7}
+ #printArea .idrows{padding:1mm 3mm}
+ #printArea .idrows>div{display:flex;gap:2mm;font-size:7.8pt;margin-bottom:1.5mm}
+ #printArea .idrows span{width:27mm;color:#1F3864;font-weight:700;flex:none}
+ #printArea .idprop{position:absolute;bottom:0;left:0;right:0;background:#1F3864;color:#fff;text-align:center;font-size:7pt;font-weight:700;padding:1.2mm 0;letter-spacing:1px}
+
  #printArea .vcut{border-top:1.5px dashed #9a9a9a;margin:7px 0 5px}
 }
 
@@ -148,7 +207,7 @@ function seed(){
  ["31 December: Results & parent conference — re-admission confirmation of old students","1 January 2027: Open admissions — pinned post and flyer distribution","Ask parents for referrals (one name per family)","Check the inquiry register daily and make follow-up calls","10 January 2027: New classes begin"].forEach((x,i)=>DB.planTasks.push({id:uid()+"k"+i,text:x,done:i<1}));
  save();
 }
-function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;} if(!DB||!DB.students) seed(); else {DB.students.forEach(s=>{if(CLS_EN[s.cls])s.cls=CLS_EN[s.cls];}); (DB.inquiries||[]).forEach(i=>{if(CLS_EN[i.cls])i.cls=CLS_EN[i.cls];});} if(!DB.settings||!DB.settings.contactPhone)DB.settings={contactPhone:"0334-8169037"};}
+function load(){try{DB=JSON.parse(localStorage.getItem(KEY));}catch(e){DB=null;} if(!DB||!DB.students) seed(); else {DB.students.forEach(s=>{if(CLS_EN[s.cls])s.cls=CLS_EN[s.cls];}); (DB.inquiries||[]).forEach(i=>{if(CLS_EN[i.cls])i.cls=CLS_EN[i.cls];});} if(!DB.settings||!DB.settings.contactPhone)DB.settings={contactPhone:"0334-8169037"}; if(!DB.deeni)DB.deeni=[]; if(!DB.opinions)DB.opinions=[];}
 /* ============ HELPERS ============ */
 function st(id){return DB.students.find(s=>s.id===id);}
 function contactPhone(){return (DB.settings&&DB.settings.contactPhone)||"0334-8169037";}
@@ -195,19 +254,19 @@ function rStudents(){
  <div><label>Name</label><input id="ns_name" value="${E?esc(E.name):""}"></div><div><label>Father Name</label><input id="ns_father" value="${E?esc(E.father):""}"></div>
  <div><label>Class</label><select id="ns_cls">${CLASSES.map(c=>`<option ${E&&E.cls===c?"selected":""}>${c}</option>`).join("")}</select></div>
  <div><label>Monthly Fee (Rs)</label><input id="ns_fee" type="number" value="${E?E.fee:""}"></div>
- <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div><div><label>Book Dues (Rs)</label><input id="ns_books" type="number" value="${E?(E.books||0):0}"></div><div><label>Exam Fund Dues (Rs)</label><input id="ns_fund" type="number" value="${E?(E.fund||0):0}"></div>
+ <div><label>Old Arrears (Rs)</label><input id="ns_arr" type="number" value="${E?(E.arrears||0):0}"></div><div><label>Arrears Months (e.g. December 2026)</label><input id="ns_arrlabel" value="${E?esc(E.arrLabel||""):""}"></div><div><label>Book Dues (Rs)</label><input id="ns_books" type="number" value="${E?(E.books||0):0}"></div><div><label>Exam Fund Dues (Rs)</label><input id="ns_fund" type="number" value="${E?(E.fund||0):0}"></div>
  <div><label>Phone (Parent — for messages)</label><input id="ns_phone" value="${E?esc(E.phone):""}" placeholder="03XX-XXXXXXX"><button class="btn ghost" type="button" onclick="pickContact('ns_phone')" style="margin-top:6px">Pick from Contacts</button></div></div>
  <p class="small">Sibling discount rule: the child in the highest class pays the full fee; the next 5% less, the third 10%, the fourth 15% — discount on the monthly fee only. Enter the final fee after discount here.</p>
  ${E?`<button class="btn" onclick="saveStudentEdit()">Save Changes</button> <button class="btn ghost" onclick="cancelEdit()">Cancel</button>`:`<button class="btn" onclick="addStudent()">Add Student</button>`}</div>`;
 }
 function addStudent(){const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}
- DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,books:+document.getElementById("ns_books").value||0,fund:+document.getElementById("ns_fund").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
+ DB.students.push({id:uid(),adm:"2027-"+String(DB.students.length+1).padStart(3,"0"),name:n,father:document.getElementById("ns_father").value.trim(),cls:document.getElementById("ns_cls").value,fee:+document.getElementById("ns_fee").value||0,arrears:+document.getElementById("ns_arr").value||0,arrLabel:document.getElementById("ns_arrlabel").value.trim(),books:+document.getElementById("ns_books").value||0,fund:+document.getElementById("ns_fund").value||0,phone:document.getElementById("ns_phone").value.trim()});save();render();}
 function editStudent(id){editId=id;render();setTimeout(()=>{const el=document.getElementById("ns_phone");if(el)el.scrollIntoView({behavior:"smooth",block:"center"});},50);}
 function cancelEdit(){editId="";render();}
-function saveStudentEdit(){const s=st(editId);if(!s){editId="";render();return;}const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}s.name=n;s.father=document.getElementById("ns_father").value.trim();s.cls=document.getElementById("ns_cls").value;s.fee=+document.getElementById("ns_fee").value||0;s.arrears=+document.getElementById("ns_arr").value||0;s.books=+document.getElementById("ns_books").value||0;s.fund=+document.getElementById("ns_fund").value||0;s.phone=document.getElementById("ns_phone").value.trim();editId="";save();render();}
+function saveStudentEdit(){const s=st(editId);if(!s){editId="";render();return;}const n=document.getElementById("ns_name").value.trim();if(!n){alert("Please enter the name");return;}s.name=n;s.father=document.getElementById("ns_father").value.trim();s.cls=document.getElementById("ns_cls").value;s.fee=+document.getElementById("ns_fee").value||0;s.arrears=+document.getElementById("ns_arr").value||0;s.arrLabel=document.getElementById("ns_arrlabel").value.trim();s.books=+document.getElementById("ns_books").value||0;s.fund=+document.getElementById("ns_fund").value||0;s.phone=document.getElementById("ns_phone").value.trim();editId="";save();render();}
 const LADDER=["Play Group","Nursery","Prep","Class 1","Class 2","Class 3","Class 4","Class 5"];
 function promoteStudent(id){const s=st(id);if(!s)return;const i=LADDER.indexOf(s.cls);if(i<0||i===LADDER.length-1){alert(s.name+" is in Class 5 — the highest class in the app. The record stays as it is.");return;}const nx=LADDER[i+1];if(!confirm("Promote "+s.name+" from "+s.cls+" to "+nx+"? Name, father, phone, fee and dues all stay the same."))return;s.cls=nx;save();render();}
-function delStudent(id){if(!confirm("This student and all their records will be deleted. Continue?"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);save();render();}
+function delStudent(id){if(!confirm("This student and all their records will be deleted. Continue?"))return;DB.students=DB.students.filter(s=>s.id!==id);DB.payments=DB.payments.filter(p=>p.studentId!==id);DB.attendance=DB.attendance.filter(a=>a.studentId!==id);DB.results=DB.results.filter(r=>r.studentId!==id);DB.deeni=(DB.deeni||[]).filter(r=>r.studentId!==id);DB.opinions=(DB.opinions||[]).filter(r=>r.studentId!==id);save();render();}
 /* ---- Fees ---- */
 function rFees(){
  const m=ym();const col=DB.payments.filter(p=>ym(p.date)===m).reduce((a,p)=>a+p.amount,0);
@@ -277,22 +336,34 @@ function delExpense(id){DB.expenses=DB.expenses.filter(e=>e.id!==id);save();rend
 let resExam="December Exam 2026";
 function rResults(){
  const exams=[...new Set(DB.results.map(r=>r.exam))];if(!exams.includes(resExam)&&exams.length)resExam=exams[0];
- const rows=DB.students.map(s=>{const rs=DB.results.filter(r=>r.studentId===s.id&&r.exam===resExam);if(!rs.length)return null;const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=Math.round(ob/tt*100);const g=pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":"E";return{s,rs,ob,tt,pc,g};}).filter(Boolean);
- return `<h2>Results</h2><div class="row"><div><label>Exam</label><input value="${esc(resExam)}" onchange="resExam=this.value;render()"></div></div>
+ const rows=DB.students.map(s=>{const rs=DB.results.filter(r=>r.studentId===s.id&&r.exam===resExam);if(!rs.length)return null;const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=Math.round(ob/tt*100);const g=gradeOf(pc);return{s,rs,ob,tt,pc,g};}).filter(Boolean);
+ return `<h2>Results</h2><div class="row"><div><label>Exam</label><input list="examList" value="${esc(resExam)}" onchange="resExam=this.value;render()"><datalist id="examList"><option value="Monthly Test"><option value="Term 1"><option value="Term 2"><option value="Term 3"><option value="Final Term"></datalist></div></div>
  ${rows.map(r=>`<div class="box"><b>${esc(r.s.name)}</b> — ${r.s.cls} — Total: ${r.ob}/${r.tt} — <b>${r.pc}%</b> — Grade <span class="pill">${r.g}</span> <button class="btn sm ghost" onclick="printResultCard('${r.s.id}')">Print Result Card</button>
  <table style="margin-top:8px"><tr><th>Subject</th><th>Obtained</th><th>Total</th></tr>${r.rs.map(x=>`<tr><td>${esc(x.subject)}</td><td>${x.obtained}</td><td>${x.total}</td></tr>`).join("")}</table></div>`).join("")||"<p>No results entered for this exam.</p>"}
  <div class="box"><h3>Enter Marks</h3><div class="grid">
  <div><label>Student</label><select id="nr_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div>
  <div><label>Subject</label><input id="nr_sub"></div><div><label>Obtained</label><input id="nr_ob" type="number"></div><div><label>Total</label><input id="nr_tt" type="number" value="100"></div></div>
  <div style="margin-top:10px"><button class="btn" onclick="addResult()">Save Marks</button></div>
- <p class="small">An absent student's card is marked "Absent" — never "Fail".</p></div>`;
+ <p class="small">An absent student's card is marked "Absent" — never "Fail".</p></div>
+ <div class="box"><h3>Deeni Tarbiyat & Teacher's Opinion <span class="small">(for ${esc(resExam)})</span></h3>
+ <div class="row"><div><label>Student</label><select id="dn_stu" onchange="dnStu=this.value;render()">${DB.students.map(s=>`<option value="${s.id}" ${dnStu===s.id?"selected":""}>${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div></div>
+ ${(()=>{const s=st(dnStu)||DB.students[0];if(!s)return "";const jr=isJunior(s);const items=jr?DEENI_JR:DEENI_SR;const dn=deeniOf(s.id,resExam);const op=opinionOf(s.id,resExam);const opts=v=>["","A+","A","B","C","D"].map(g=>`<option ${v===g?"selected":""}>${g}</option>`).join("");
+ return `<div class="grid">${items.map((it,i)=>jr&&i===0?`<div><label>${it} (e.g. تختی نمبر 12)</label><input id="dn_qaida" value="${esc(dn.qaida||"")}"></div>`:`<div><label>${it}</label><select id="dn_${i}">${opts(dn.grades[it]||"")}</select></div>`).join("")}</div>
+ <div style="margin-top:8px"><label>Teacher's Opinion (استاد کی رائے)</label><input id="dn_opinion" value="${esc(op)}" style="width:100%"></div>
+ <div style="margin-top:10px"><button class="btn" onclick="saveDeeni('${s.id}')">Save Deeni & Opinion</button></div>`;})()}</div>`;
 }
+let dnStu="";
+function saveDeeni(sid){const s=st(sid);if(!s)return;const jr=isJunior(s);const items=jr?DEENI_JR:DEENI_SR;const grades={};items.forEach((it,i)=>{if(jr&&i===0)return;const el=document.getElementById("dn_"+i);if(el)grades[it]=el.value;});
+ const qaida=jr?(document.getElementById("dn_qaida")?.value||""):"";
+ DB.deeni=DB.deeni||[];const ix=DB.deeni.findIndex(d=>d.studentId===sid&&d.exam===resExam);const rec={studentId:sid,exam:resExam,grades,qaida};if(ix>=0)DB.deeni[ix]=rec;else DB.deeni.push(rec);
+ DB.opinions=DB.opinions||[];const ox=DB.opinions.findIndex(o=>o.studentId===sid&&o.exam===resExam);const orec={studentId:sid,exam:resExam,text:document.getElementById("dn_opinion").value};if(ox>=0)DB.opinions[ox]=orec;else DB.opinions.push(orec);
+ save();render();}
 function addResult(){const sub=document.getElementById("nr_sub").value.trim();if(!sub)return;DB.results.push({id:uid(),studentId:document.getElementById("nr_stu").value,exam:resExam,subject:sub,obtained:+document.getElementById("nr_ob").value||0,total:+document.getElementById("nr_tt").value||100});save();render();}
 /* ---- Admissions ---- */
 function rAdmissions(){
  const cnt=x=>DB.inquiries.filter(i=>i.status===x).length;
  return `<h2>Admissions Plan — January 2027</h2>
- <div class="note">Fees for new students: Play Group 1,500 — Nursery 1,800 — Prep 2,000 — Class 1: 2,200 — Class 2: 2,500 — Class 3: 2,800 — Class 4: 3,000 — Class 5: 3,500. Admission fee 1,000 (new students only). Exam fund 800/year (400 in January + 400 in June). The flyer carries only this line: "Monthly fee starts from just Rs 1,500".</div>
+ <div class="note">Fees for new students: Play Group 1,500 — Nursery 1,800 — Prep 2,000 — Class 1: 2,200 — Class 2: 2,500 — Class 3: 2,800 — Class 4: 3,000 — Class 5: 3,500. Admission fee 1,000 (new students only). Paper fund 800/year — Rs 200 before each exam (Feb, May, Aug, Nov), collected separately against a receipt. The flyer carries only this line: "Monthly fee starts from just Rs 1,500".</div>
  <div class="cards"><div class="card"><b>${cnt("New")}</b><span>New Inquiries</span></div><div class="card"><b>${cnt("Contacted")}</b><span>Contacted</span></div><div class="card"><b>${cnt("Visited")}</b><span>Visited</span></div><div class="card"><b>${cnt("Admitted")}</b><span>Admitted</span></div></div>
  <div class="box"><h3>Plan Checklist</h3>${DB.planTasks.map(t=>`<div><label style="display:flex;gap:8px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" style="width:auto" ${t.done?"checked":""} onchange="toggleTask('${t.id}')"> ${esc(t.text)}</label></div>`).join("")}</div>
  <div class="box"><h3>Inquiry Register</h3><table><tr><th>Date</th><th>Name</th><th>Class</th><th>Phone</th><th>Status</th></tr>
@@ -311,56 +382,179 @@ const STRIP="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAB7wAAAF8CAIAAADTj1N/A
 function ph(img){return `<div class="ph"><img src="${img}"></div>`;}
 function rsu(n){return Number(n||0).toLocaleString("en-US")+" روپے";}
 function rTemplates(){
+ const clsOpts=CLASSES.map(c=>`<option>${c}</option>`).join("");
  return `<h2>Templates (Print)</h2>
  <div class="box"><h3>From Records</h3><div class="row">
- <div><label>Select Student</label><select id="tp_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div></div>
+ <div><label>Select Student</label><select id="tp_stu">${DB.students.map(s=>`<option value="${s.id}">${esc(s.name)} — ${s.cls}</option>`).join("")}</select></div>
+ <div><label>Bulk Class (vouchers / ID cards)</label><select id="tp_cls"><option value="">All Classes</option>${clsOpts}</select></div></div>
  <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
  <button class="btn" onclick="printVoucher(document.getElementById('tp_stu').value)">Fee Voucher</button>
- <button class="btn" onclick="printAllVouchers()">Print All Vouchers</button>
- <button class="btn gold" onclick="printResultCard(document.getElementById('tp_stu').value)">Result Card</button></div></div>
+ <button class="btn" onclick="printAllVouchers(document.getElementById('tp_cls').value)">Print Vouchers (Bulk)</button>
+ <button class="btn gold" onclick="printResultCard(document.getElementById('tp_stu').value)">Result Card</button>
+ <button class="btn gold" onclick="printTermSlip(document.getElementById('tp_stu').value)">Term Slip</button>
+ <button class="btn" onclick="printAdmissionSlip(document.getElementById('tp_stu').value)">Admission Slip</button>
+ <button class="btn" onclick="printIDCard(document.getElementById('tp_stu').value)">ID Card</button>
+ <button class="btn" onclick="printIDCards(document.getElementById('tp_cls').value)">ID Cards (Bulk)</button></div>
+ <div class="row" style="margin-top:12px">
+ <div><label>Leave — From</label><input type="date" id="lv_from"></div>
+ <div><label>Leave — To</label><input type="date" id="lv_to"></div>
+ <div><label>Leave Reason</label><input id="lv_reason" placeholder="e.g. بیماری"></div></div>
+ <div style="margin-top:8px"><button class="btn" onclick="printLeaveSlip(document.getElementById('tp_stu').value)">Leave Slip (2 copies)</button></div></div>
  <div class="box"><h3>Blank Forms</h3><div style="display:flex;gap:8px;flex-wrap:wrap">
- <button class="btn ghost" onclick="printAdmissionForm()">Admission Form</button>
- <button class="btn ghost" onclick="printLeaveSlip()">Leave Slip</button>
- <button class="btn ghost" onclick="printNotice()">Parent Notice</button></div></div>`;
+ <button class="btn ghost" onclick="printAdmissionForm()">Admission Form</button></div>
+ <h3 style="margin-top:14px">Parent Notice</h3><div class="row">
+ <div><label>Subject</label><input id="nt_subject" value="نتیجہ و والدین کانفرنس — 31 دسمبر 2026"></div>
+ <div><label>Day</label><input id="nt_day" value="جمعرات"></div>
+ <div><label>Date</label><input id="nt_date" value="31 دسمبر 2026"></div>
+ <div><label>Time</label><input id="nt_time" value="صبح 9 بجے"></div>
+ <div><label>Place</label><input id="nt_place" value="اسکول رسول نگر"></div></div>
+ <div><label>Notice Text (one paragraph per line)</label><textarea id="nt_body" rows="4" style="width:100%">تمام والدین و سرپرست حضرات کو مطلع کیا جاتا ہے کہ اسکول کے سالانہ (فائنل ٹرم) امتحان کا نتیجہ بروز جمعرات 31 دسمبر 2026 کو سنایا جائے گا۔ اس موقع پر والدین کانفرنس بھی ہوگی، جس میں بچوں کی تعلیمی کارکردگی، حاضری اور اگلے سیشن (جنوری 2027) کے داخلوں کی تصدیق پر بات چیت ہوگی۔
+تمام والدین سے گزارش ہے کہ مقررہ دن صبح 9 بجے بچے کے ہمراہ اسکول تشریف لائیں اور نتیجہ کارڈ وصول کریں۔ اگر کسی وجہ سے تشریف لانا ممکن نہ ہو تو پہلے دفتر کو اطلاع کر دیں۔
+نئے سیشن کے داخلوں کی تصدیق بھی اسی دن ہوگی۔ جو والدین نئے بچوں کا داخلہ کرانا چاہیں، وہ بھی اسی دن دفتر سے رابطہ کریں۔</textarea></div>
+ <div><label>Instructions (one per line)</label><textarea id="nt_points" rows="4" style="width:100%">براہ کرم مقررہ وقت پر پہنچیں؛ کانفرنس صبح 9 بجے شروع ہو جائے گی۔
+بچے کو اپنے ہمراہ لائیں — نتیجہ کارڈ بچے کی موجودگی میں دیا جائے گا۔
+نتیجہ کارڈ وصول کرتے وقت وصولی پرچی پر دستخط کرنا ضروری ہے۔
+جس بچے کی فیس بقایا ہو، اس کی تفصیل دفتر سے حاصل کر لیں۔</textarea></div>
+ <div style="margin-top:8px"><button class="btn ghost" onclick="printNotice()">Print Notice</button></div></div>`;
 }
 function doPrint(html){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div><div class="frame">${html}</div>`;window.print();}
 function doPrintSlips(html){document.getElementById("printArea").innerHTML=html;window.print();}
-function voucherSlip(s,mn,y){const tot=(s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0);
- const chg=[["ماہانہ فیس",s.fee||0],["پرانا بقایا",s.arrears||0],["کتابوں کا بقایا",s.books||0],["امتحانی فنڈ",s.fund||0]].filter(c=>c[1]>0);
- return `<div class="vslip"><table><tr><td style="width:42px"><img class="vlogo" src="${LOGO}"></td><td class="vsname">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی، رسول نگر</td><td style="width:92px"><div class="vtag">فیس واؤچر</div></td><td class="vmeta" style="width:170px">نمبر: ${s.adm}<br>مہینہ: ${mn} ${y}</td></tr></table>
- <table class="vstu"><tr><td><span class="vk">طالب علم: </span><b>${esc(s.name)}</b></td><td><span class="vk">جماعت: </span><b>${CLS_UR[s.cls]||s.cls}</b></td><td><span class="vk">آخری تاریخ: </span><b>5 ${mn} ${y}</b></td></tr></table>
- <table class="vchg"><tr>${chg.map(c=>`<td><span class="vk">${c[0]}: </span><span class="vamt">${Number(c[1]).toLocaleString("en-US")}</span></td>`).join("")}<td class="vtot"><span>کل: ${rsu(tot)}</span></td></tr></table>
- <p class="vinst">ادائیگی پرنسپل کو کریں اور رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔ رابطہ: \u200e${contactPhone()}</p></div>`;}
+function doPrintFrames(pages){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div>`+pages.map((h,i)=>`<div class="frame" ${i?`style="page-break-before:always"`:''}>${h}</div>`).join("");window.print();}
+/* ---- shared helpers for the finalized templates ---- */
+const ORD_UR=["اول","دوم","سوم","چہارم","پنجم","ششم","ہفتم","ہشتم","نہم","دہم"];
+const DEENI_SR=["نماز کی پابندی","دعائیں (یاد)","احادیث (یاد)","درود شریف","آداب و اخلاق"];
+const DEENI_JR=["نورانی قاعدہ (پیش رفت)","دعائیں (یاد)","درود شریف","احادیث (یاد)","آداب و اخلاق"];
+function isJunior(s){return ["Play Group","Nursery","Prep"].includes(s.cls);}
+function rollOf(s){const list=DB.students.filter(x=>x.cls===s.cls).slice().sort((a,b)=>String(a.adm).localeCompare(String(b.adm)));const i=list.findIndex(x=>x.id===s.id);return i<0?"":String(i+1).padStart(2,"0");}
+function gradeOf(pc){return pc>=90?"A+":pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":pc>=40?"E":"مزید بہتری درکار";}
+function urDate(iso){if(!iso)return "";const p=String(iso).split("-");if(p.length<3)return iso;return (+p[2])+" "+(MONTHS_UR[+p[1]-1]||"")+" "+p[0];}
+function attStats(id){const dates=[...new Set(DB.attendance.map(a=>a.date))];let pr=0,lv=0,ab=0;DB.attendance.filter(a=>a.studentId===id).forEach(a=>{if(a.status==="present")pr++;else if(a.status==="leave")lv++;else if(a.status==="absent")ab++;});const tot=pr+lv+ab;return{days:dates.length,pr,lv,ab,pc:tot?Math.round(pr/tot*100):0};}
+function deeniOf(id,exam){return (DB.deeni||[]).find(d=>d.studentId===id&&d.exam===exam)||{grades:{},qaida:""};}
+function opinionOf(id,exam){const o=(DB.opinions||[]).find(x=>x.studentId===id&&x.exam===exam);return o?o.text:"";}
+function positionOf(s,exam){const rows=DB.students.filter(x=>x.cls===s.cls).map(x=>({x,ob:DB.results.filter(r=>r.studentId===x.id&&r.exam===exam).reduce((a,r)=>a+r.obtained,0),has:DB.results.some(r=>r.studentId===x.id&&r.exam===exam)})).filter(r=>r.has);if(rows.length<2)return "";rows.sort((a,b)=>b.ob-a.ob);const i=rows.findIndex(r=>r.x.id===s.id);return i<0?"":(ORD_UR[i]||String(i+1));}
+const UW=["","ایک","دو","تین","چار","پانچ","چھ","سات","آٹھ","نو","دس","گیارہ","بارہ","تیرہ","چودہ","پندرہ","سولہ","سترہ","اٹھارہ","انیس","بیس","اکیس","بائیس","تیئیس","چوبیس","پچیس","چھبیس","ستائیس","اٹھائیس","انتیس","تیس","اکتیس","بتیس","تینتیس","چونتیس","پینتیس","چھتیس","سینتیس","اڑتیس","انتالیس","چالیس","اکتالیس","بیالیس","تینتالیس","چوالیس","پینتالیس","چھیالیس","سینتالیس","اڑتالیس","انچاس","پچاس","اکاون","باون","ترپن","چون","پچپن","چھپن","ستاون","اٹھاون","انسٹھ","ساٹھ","اکسٹھ","باسٹھ","ترسٹھ","چونسٹھ","پینسٹھ","چھیاسٹھ","سڑسٹھ","اڑسٹھ","انہتر","ستر","اکہتر","بہتر","تہتر","چوہتر","پچہتر","چھہتر","ستتر","اٹھہتر","اناسی","اسی","اکیاسی","بیاسی","تراسی","چوراسی","پچاسی","چھیاسی","ستاسی","اٹھاسی","نواسی","نوے","اکانوے","بانوے","ترانوے","چورانوے","پچانوے","چھیانوے","ستانوے","اٹھانوے","ننانوے"];
+function urduWords(n){n=Math.round(+n||0);if(n<=0)return "صفر روپے";let out="";const th=Math.floor(n/1000),hu=Math.floor(n%1000/100),rest=n%100;if(th)out+=UW[th]+" ہزار";if(hu)out+=(out?" ":"")+UW[hu]+" سو";if(rest)out+=(out?" ":"")+UW[rest];return out+" روپے";}
+function slipHead(tag){return `<table class="fh"><tr><td style="width:58px"><img src="${LOGO}" style="width:52px;height:52px;object-fit:contain"></td><td><div class="fname">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی</div><div class="faddr">محلہ رانا ٹاؤن، عقب میزبان مارکی، رسول نگر — رابطہ: ‎${contactPhone()}</div></td><td style="width:118px"><div class="ftag">${tag}</div></td></tr></table>`;}
+function recvBox(){return `<div class="frecv"><span>وصول کنندہ</span></div>`;}
+/* ---- Fee voucher — FINAL design: monthly fee only + arrears (month named) ---- */
+function voucherSlip(s,mn,y){const fee=s.fee||0,arr=s.arrears||0,tot=fee+arr;
+ const arrLab=s.arrLabel?`بقایا فیس (${esc(s.arrLabel)})`:"بقایا فیس";
+ return `<div class="fslip">${slipHead("فیس واؤچر")}
+ <table class="fid"><tr><td>طالب علم: <b>${esc(s.name)}</b></td><td>جماعت: <b>${CLS_UR[s.cls]||s.cls}</b></td><td>داخلہ نمبر: <b>${s.adm}</b></td><td>مہینہ: <b>${mn} ${y}</b></td><td>آخری تاریخ: <b>5 ${mn} ${y}</b></td></tr></table>
+ <table class="fchg"><tr><td>ماہانہ فیس</td><td class="fa">${fee.toLocaleString("en-US")}</td>${arr>0?`<td>${arrLab}</td><td class="fa">${arr.toLocaleString("en-US")}</td>`:""}<td class="ftot">کل واجب الادا: ${rsu(tot)}</td></tr></table>
+ <div class="frow2"><p class="finst">ادائیگی پرنسپل کو کریں اور دستخط شدہ رسید ضرور وصول کریں — رسید کے بغیر ادائیگی کا ریکارڈ نہیں بنے گا۔</p>${recvBox()}</div></div>`;}
 function printVoucher(id){const s=st(id);if(!s)return;const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];doPrintSlips(voucherSlip(s,mn,y));}
-function printAllVouchers(){const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];
- const list=DB.students.filter(s=>((s.fee||0)+(s.arrears||0)+(s.books||0)+(s.fund||0))>0);
+function printAllVouchers(cls){const now=ym();const y=now.slice(0,4),mo=+now.slice(5,7);const mn=MONTHS_UR[mo-1];
+ let list=DB.students.filter(s=>(s.fee||0)+(s.arrears||0)>0);if(cls)list=list.filter(s=>s.cls===cls);
  if(!list.length){alert("No vouchers to print");return;}
- doPrintSlips(list.map((s,i)=>(i?`<div class="vcut"></div>`:"")+voucherSlip(s,mn,y)).join(""));}
-function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);
- doPrintSlips(`<div class="vslip"><table><tr><td style="width:42px"><img class="vlogo" src="${LOGO}"></td><td class="vsname">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی، رسول نگر</td><td style="width:92px"><div class="vtag">فیس رسید</div></td><td class="vmeta" style="width:170px">تاریخ: ${p.date}</td></tr></table>
- <table class="vstu"><tr><td><span class="vk">طالب علم: </span><b>${esc(s?s.name:"")}</b></td><td><span class="vk">جماعت: </span><b>${s?(CLS_UR[s.cls]||s.cls):""}</b></td><td><span class="vk">داخلہ نمبر: </span><b>${s?s.adm:""}</b></td></tr></table>
- <table class="vchg"><tr><td><span class="vk">وصول شدہ رقم</span></td><td class="vtot"><span>${rsu(p.amount)}</span></td></tr></table>
- <p class="vinst">یہ رسید فیس کی وصولی کا ثبوت ہے — سنبھال کر رکھیں۔ رابطہ: \u200e${contactPhone()}</p>
- <p class="vsig">دستخط: پرنسپل</p></div>`);}
-function printResultCard(id){const s=st(id);if(!s)return;const rs=DB.results.filter(r=>r.studentId===id&&r.exam===resExam);
- const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=tt?Math.round(ob/tt*100):0;const g=pc>=80?"A":pc>=70?"B":pc>=60?"C":pc>=50?"D":"E";
- doPrint(`${ph(HDR_R)}<div class="band">رزلٹ کارڈ — ${esc(resExam)}</div>
- <p><b>نام:</b> ${esc(s.name)} &nbsp; <b>جماعت:</b> ${CLS_UR[s.cls]||s.cls} &nbsp; <b>داخلہ نمبر:</b> ${s.adm}</p>
- <table><tr><th>مضمون</th><th>حاصل نمبر</th><th>کل نمبر</th></tr>${rs.map(r=>`<tr><td>${SUBJ_UR[r.subject]||esc(r.subject)}</td><td>${r.obtained}</td><td>${r.total}</td></tr>`).join("")}
- <tr><th>مجموعہ</th><th>${ob}</th><th>${tt}</th></tr></table>
- <p><b>فیصد:</b> ${pc}% &nbsp; <b>گریڈ:</b> ${g}</p><p class="sig">دستخط: پرنسپل (حافظ محمد انس معاویہ)</p>`);}
-function printAdmissionForm(){doPrint(`${ph(HDR_C)}<div class="band">داخلہ فارم</div>
- <table><tr><th>طالب علم کا نام</th><td style="width:60%"></td></tr><tr><th>تاریخ پیدائش</th><td></td></tr><tr><th>والد کا نام / شناختی کارڈ</th><td></td></tr><tr><th>والد کا پیشہ / فون</th><td></td></tr><tr><th>پتہ</th><td></td></tr><tr><th>مطلوبہ کلاس</th><td></td></tr><tr><th>ایمرجنسی رابطہ (1)</th><td></td></tr><tr><th>ایمرجنسی رابطہ (2)</th><td></td></tr><tr><th>بچہ لے جانے کے مجاز افراد</th><td></td></tr></table>
- <p>قواعد: فیس ہر مہینے کی 5 تاریخ تک ادا کریں۔ چھٹی صرف «چھٹی ملنے کی رسید» سے ہوگی۔ بغیر اطلاع غیر حاضری پر 100 روپے یومیہ جرمانہ ہوگا جو الگ ریکارڈ میں درج ہوگا۔</p>
- <p>والد کا اقرار: میں اسکول کے قواعد و ضوابط کی پابندی کا اقرار کرتا/کرتی ہوں۔</p>
- <p>والد کے دستخط: ____________ &nbsp;&nbsp; تاریخ: ____________</p>`);}
-function printLeaveSlip(){doPrint(`${ph(HDR_C)}<div class="band">چھٹی ملنے کی رسید</div>
- <table><tr><th>طالب علم کا نام</th><td style="width:60%"></td></tr><tr><th>کلاس</th><td></td></tr><tr><th>چھٹی کی تاریخ</th><td></td></tr><tr><th>وجہ</th><td></td></tr><tr><th>والد کے دستخط</th><td></td></tr><tr><th>ٹیچر کے دستخط</th><td></td></tr></table>
- <p>نوٹ: چھٹی صرف اس رسید کے ذریعے ہوگی — پیغام، کال یا زبانی اطلاع قابلِ قبول نہیں۔</p>`);}
-function printNotice(){doPrint(`${ph(HDR_A)}<div class="band">اطلاع نامہ برائے والدین</div>
- <p>عنوان: ________________________________________</p>
- <p style="min-height:160px;border:1px solid #999;padding:10px">متن یہاں لکھیں۔</p>
- <p class="sig">دستخط: پرنسپل (حافظ محمد انس معاویہ)</p>`);}
+ doPrintSlips(list.map(s=>voucherSlip(s,mn,y)).join(`<div class="fcut"></div>`));}
+function printReceipt(pid){const p=DB.payments.find(x=>x.id===pid);if(!p)return;const s=st(p.studentId);if(!s)return;
+ doPrintSlips(`<div class="fslip">${slipHead("فیس رسید")}
+ <table class="fid"><tr><td>طالب علم: <b>${esc(s.name)}</b></td><td>جماعت: <b>${CLS_UR[s.cls]||s.cls}</b></td><td>داخلہ نمبر: <b>${s.adm}</b></td><td>تاریخ: <b>${urDate(p.date)}</b></td></tr></table>
+ <table class="fchg"><tr><td>وصول شدہ رقم</td><td class="ftot">${rsu(p.amount)}</td></tr></table>
+ <div class="frow2"><p class="finst">یہ رسید فیس کی وصولی کا ثبوت ہے — سنبھال کر رکھیں۔</p>${recvBox()}</div>
+ <p class="fsig">دستخط: پرنسپل</p></div>`);}
+/* ---- Result card & term slip — FINAL design ---- */
+function cardHTML(s,exam,mode){const rs=DB.results.filter(r=>r.studentId===s.id&&r.exam===exam);
+ const ob=rs.reduce((a,r)=>a+r.obtained,0),tt=rs.reduce((a,r)=>a+r.total,0);const pc=tt?Math.round(ob/tt*100):0;
+ const jr=isJunior(s);const dn=deeniOf(s.id,exam);const items=jr?DEENI_JR:DEENI_SR;const at=attStats(s.id);const op=opinionOf(s.id,exam);
+ const band=mode==="term"?(jr?`ٹرم رپورٹ سلپ — ${esc(exam)} (زبانی و سرگرمی جائزہ)`:`ٹرم رپورٹ سلپ — ${esc(exam)}`):`رزلٹ کارڈ — ${esc(exam)}`;
+ const dcell=it=>{if(jr&&it.startsWith("نورانی"))return dn.qaida||"—";return dn.grades[it]||"—";};
+ return `${ph(HDR_R)}<div class="band">${band}</div>
+ <div class="idstrip"><div><span>نام</span><b>${esc(s.name)}</b></div><div><span>رول نمبر</span><b>${rollOf(s)}</b></div><div><span>جماعت</span><b>${CLS_UR[s.cls]||s.cls}</b></div><div><span>داخلہ نمبر</span><b>${s.adm}</b></div></div>
+ ${rs.length?`<table><tr><th>مضمون</th><th>حاصل نمبر</th><th>کل نمبر</th></tr>${rs.map(r=>`<tr><td>${SUBJ_UR[r.subject]||esc(r.subject)}</td><td>${r.obtained}</td><td>${r.total}</td></tr>`).join("")}<tr><th>مجموعہ</th><th>${ob}</th><th>${tt}</th></tr></table>`:`<p class="fnote">اس امتحان کے نمبر ابھی درج نہیں ہوئے۔</p>`}
+ <div class="sumrow"><div><span>مجموعی نمبر</span><b>${ob} / ${tt}</b></div><div><span>فیصد</span><b>${pc}٪</b></div><div><span>گریڈ</span><b>${gradeOf(pc)}</b></div><div><span>پوزیشن</span><b>${positionOf(s,exam)||"—"}</b></div></div>
+ <div class="dhead">دینی تربیت</div><div class="drow">${items.map(it=>`<div><span>${it}</span><b>${esc(dcell(it))}</b></div>`).join("")}</div>
+ <div class="dhead">حاضری</div><div class="drow arow"><div><span>کل تعلیمی دن</span><b>${at.days}</b></div><div><span>حاضر</span><b>${at.pr}</b></div><div><span>رخصت</span><b>${at.lv}</b></div><div><span>غیر حاضر</span><b>${at.ab}</b></div><div><span>حاضری فیصد</span><b>${at.pc}٪</b></div></div>
+ <div class="opbox"><b>استاد کی رائے:</b> ${esc(op)||"—"}<div class="fscale">گریڈ پیمانہ: A+ 90–100 · A 80–89 · B 70–79 · C 60–69 · D 50–59 · E 40–49 · 40 سے کم: مزید بہتری درکار</div></div>
+ <table class="fsigs"><tr><td><span class="sgn">کلاس ٹیچر کے دستخط</span></td><td><span class="sgn">والد / سرپرست کے دستخط</span></td><td><span class="sgn">پرنسپل (حافظ محمد انس معاویہ)</span></td></tr></table>`;}
+function printResultCard(id){const s=st(id);if(!s)return;doPrint(cardHTML(s,resExam,"annual"));}
+function printTermSlip(id){const s=st(id);if(!s)return;doPrint(cardHTML(s,resExam,"term"));}
+
+/* ---- Admission slip — FINAL design ---- */
+function printAdmissionSlip(id){const s=st(id);if(!s)return;
+ const admFee=1000,firstFee=s.fee||0,books=s.books||0,card=250,tot=admFee+firstFee+books+card;
+ const inst2=Math.min(2000,Math.floor(tot/2)),inst1=tot-inst2;
+ const now=new Date();const nm=new Date(now.getFullYear(),now.getMonth()+1,1);const due="5 "+(MONTHS_UR[nm.getMonth()]||"")+" "+nm.getFullYear();
+ const rows=[["داخلہ فیس (ایک بار)",admFee],["پہلی ماہانہ فیس",firstFee],["کتابیں",books],["شناختی کارڈ (آئی ڈی کارڈ) — ایک بار",card]];
+ doPrint(`${ph(HDR_C)}<div class="band">داخلہ سلپ — نیا داخلہ</div>
+ <div class="idstrip"><div><span>نام طالب علم</span><b>${esc(s.name)}</b></div><div><span>والد کا نام</span><b>${esc(s.father||"")}</b></div><div><span>جماعت</span><b>${CLS_UR[s.cls]||s.cls}</b></div><div><span>داخلہ نمبر</span><b>${s.adm}</b></div><div><span>تاریخ داخلہ</span><b>${urDate(today())}</b></div></div>
+ <table><tr><th>مد</th><th>رقم (روپے)</th></tr>${rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1].toLocaleString("en-US")}</td></tr>`).join("")}
+ <tr><th style="background:#1F3864;color:#fff">کل رقم</th><th style="background:#1F3864;color:#fff">${tot.toLocaleString("en-US")}</th></tr></table>
+ <div class="goldbox"><b>رقم لفظوں میں:</b> ${urduWords(tot)}<br><span>اختیاری: پیپر فنڈ (سالانہ) 800 روپے — والد چاہیں تو اسی وقت ادا کر سکتے ہیں؛ ورنہ ہر امتحان سے پہلے 200 روپے الگ رسید سے وصول ہوگا۔</span></div>
+ <table><tr><th style="width:50%">یکمشت ادائیگی</th><th>دو قسطیں</th></tr>
+ <tr><td>پوری رقم داخلے کے دن: <b>${tot.toLocaleString("en-US")} روپے</b></td><td>قسط 1 (داخلے کے دن): <b>${inst1.toLocaleString("en-US")} روپے</b><br>قسط 2 (${due} تک): <b>${inst2.toLocaleString("en-US")} روپے</b></td></tr></table>
+ <p class="fnote">نوٹ: یہ سلپ والد اپنے پاس رکھیں؛ اسکول کا ریکارڈ اس کے بغیر بھی محفوظ ہے۔ ماہانہ فیس ہر مہینے کی 5 تاریخ تک ادا کریں۔</p>
+ <table class="fsigs"><tr><td><span class="sgn">والد / سرپرست کے دستخط</span></td><td><span class="sgn">وصول کنندہ (دستخط و مہر)</span></td><td><span class="sgn">پرنسپل</span></td></tr></table>
+ <div class="fcut"></div>
+ <div class="goldbox" style="background:#E4EFE7"><b>اسکول کاپی</b> — نام: ${esc(s.name)} · جماعت: ${CLS_UR[s.cls]||s.cls} · داخلہ نمبر: ${s.adm} · کل رقم: ${tot.toLocaleString("en-US")} روپے · تاریخ: ${urDate(today())}</div>`);}
+/* ---- Admission form — FINAL (HY design) ---- */
+function admFormFront(){const fld=(l,n)=>`<div class="aff"><span>${l}:</span><i style="width:${n||220}px"></i></div>`;
+ return `${ph(HDR_C)}<div class="band">داخلہ فارم</div>
+ <div class="afrow"><span>Form No: <i></i></span><span>Registration No: <i></i></span><span>Session No: <i></i></span></div>
+ <div class="afband"><span>Student Information</span><b>طالب علم کی معلومات</b></div>
+ <p class="afnote">نوٹ: نام و معلومات انگریزی حروف (English) میں لکھیں۔</p>
+ <table class="afgrid"><tr><td style="width:78%">${fld("Student Name",300)}${fld("Gender: ☐ Boy ☐ Girl &nbsp; Age",60)}${fld("Student B-Form No",180)}${fld("Date of Birth",120)}${fld("Class Applied for",200)}</td><td class="afphoto">تصویر</td></tr></table>
+ <div class="afband"><span>Parent / Guardian Information</span><b>والد / سرپرست کی معلومات</b></div>
+ ${fld("Father / Guardian Name",340)}${fld("Relation with Student",150)}${fld("Occupation",170)}
+ ${fld("CNIC / B-Form No",200)}${fld("Mobile No / WhatsApp (لازمی)",170)}${fld("Address",420)}
+ <div class="afband"><span>Emergency Contact & Authorized Pickup</span><b>ہنگامی رابطہ و بچہ لینے کے مجاز افراد</b></div>
+ <table><tr><th>نمبر</th><th>نام</th><th>رشتہ</th><th>فون نمبر</th></tr><tr><td>1</td><td></td><td></td><td></td></tr><tr><td>2</td><td></td><td></td><td></td></tr><tr><td>3</td><td></td><td></td><td></td></tr></table>
+ <p class="afnote">بچہ صرف انہی افراد کے حوالے کیا جائے گا۔</p>
+ <div class="afband"><span>Academic Background</span><b>تعلیمی پس منظر</b></div>
+ ${fld("Previous School (If Any)",170)}${fld("Last Class Passed (If Any)",130)}${fld("Reason for Leaving",150)}
+ <div class="afband"><span>Religious & Moral Information</span><b>دینی و اخلاقی معلومات</b></div>
+ <div class="afrow"><span>Can Read Quran? ☐ ہاں ☐ نہیں</span><span>Can Read Norani Qaida? ☐ ہاں ☐ نہیں</span><span>Islamic Tarbiyah at Home? ☐ ہاں ☐ نہیں</span></div>
+ ${fld("Special Habits / Health Issue (If Any)",300)}
+ <table class="fsigs"><tr><td><span class="sgn">Signature of Guardian</span></td><td><span class="sgn">Signature of Principal</span></td></tr></table>
+ <p class="afnote">Office Use Only: Admission ☐ Approved ☐ Not Approved &nbsp;·&nbsp; Class Allotted: ______ &nbsp;·&nbsp; Date: ______</p>`;}
+function admFormBack(){const rules10=["اساتذہ کا ہر حال میں احترام کریں؛ بدتمیزی، دھمکی یا عوامی طور پر تنقید ناقابلِ قبول ہے۔","کلاس روم میں مداخلت سے گریز کریں؛ کلاس کے دوران اساتذہ یا طلبہ سے بحث کے لیے کلاس میں داخل نہ ہوں۔","بچے کا دفاع کرنے سے پہلے اسکول کی بات ضرور سنیں — اندھا دفاع نظم و ضبط کو ناکام بنا دیتا ہے۔","اسکول کے وقت کا احترام کریں؛ تعلیمی اوقات میں غیر ضروری فون کالز، پیغامات یا وزٹس سے گریز کریں۔","فیس کی بروقت ادائیگی یقینی بنائیں — اسکول کے نظام اور تعلیمی معیار کا دارومدار بروقت فیس پر ہے۔","صرف سرکاری رابطہ ذرائع استعمال کریں؛ افواہیں اور سوشل میڈیا پر بات مسائل کو بڑھاتی ہے۔","اسکول کے قوانین کی عوامی حمایت کریں؛ اختلافِ رائے نجی طور پر حل کریں، بچوں کے سامنے نہیں۔","خصوصی رعایت کا مطالبہ نہ کریں — قوانین سب کے لیے برابر ہوتے ہیں۔","گھر میں بچے کے رویے کی نگرانی کریں — اچھی تربیت کی شروعات گھر سے ہوتی ہے۔","اسکول کے فیصلوں اور پالیسیوں کا احترام کریں — پالیسی واضح ہو تو تعاون والدین کی ذمہ داری ہے۔"];
+ const rulesA=["داخلہ نشستوں کی دستیابی اور ٹیسٹ / انٹرویو کی بنیاد پر ہوگا۔","داخلہ فیس اور ماہانہ فیس مقررہ وقت پر ادا کرنا لازم ہوگا۔","فیس و فنڈ کی تفصیل: داخلہ فیس 1,000 روپے (ایک بار)؛ شناختی کارڈ 250 روپے (ایک بار)؛ ماہانہ فیس ہر ماہ کی 5 تاریخ تک؛ پیپر فنڈ سالانہ 800 روپے — ہر امتحان سے پہلے 200 روپے (فروری، مئی، اگست، نومبر)؛ کتابوں کی قیمت کتابیں دیتے وقت ادا ہوگی۔","طالب علم کا اسکول یونیفارم میں آنا اور صفائی کا خیال رکھنا ضروری ہوگا۔","بغیر اطلاع غیر حاضری یا مسلسل غیر حاضری پر داخلہ منسوخ کیا جا سکتا ہے۔","غیر حاضری اور جرمانہ: بچے کی بغیر اطلاع غیر حاضری پر فی دن 100 روپے جرمانہ ہوگا؛ والدین پہلے یا اسی دن تحریری اطلاع دے دیں تو جرمانہ نہیں لگے گا۔ یہ جرمانہ الگ ریکارڈ میں درج ہوگا اور پرنسپل کی ہدایت پر وصول کیا جائے گا۔","اسکول کی املاک کو نقصان پہنچانے کی صورت میں جرمانہ کیا جا سکتا ہے۔","والدین شکایات یا تجاویز باقاعدہ طریقے سے انتظامیہ تک پہنچائیں گے۔"];
+ const ol=r=>r.map((x,i)=>`<p class="afrule">${i+1}۔ ${x}</p>`).join("");
+ return `<div class="afbox"><h3>ہر والدین کے لیے 10 اہم اسکول اصول</h3><p class="afsub">اگر آپ چاہتے ہیں کہ آپ کا بچہ تعلیمی اور اخلاقی طور پر کامیاب ہو</p><div class="afband2">تو اسکول کے ساتھ تعاون ضروری ہے — یہ اصول سزا نہیں بلکہ حدود ہیں جو بچوں کی بہتری کے لیے بنائی جاتی ہیں</div>${ol(rules10)}<div class="afband2">جب والدین اور اسکول ایک ٹیم بن کر کام کرتے ہیں، تبھی بچے حقیقی معنوں میں ترقی کرتے ہیں</div></div>
+ <div class="afbox"><p class="afsub">داخلہ فارم میں دی گئی تمام معلومات درست ہونا والدین / سرپرست کی ذمہ داری ہوگی — غلط معلومات یا جعلی دستاویزات کی صورت میں داخلہ منسوخ کیا جا سکتا ہے۔</p><div class="afband2">داخلہ اسکول کے قواعد</div>${ol(rulesA)}<div class="afband2">میں اس بات کی تصدیق کرتا / کرتی ہوں کہ میں نے اسکول کے تمام اصول و ضوابط پڑھ لیے ہیں اور ان پر عمل کرنے کا پابند ہوں</div>
+ <table class="fsigs"><tr><td><span class="sgn">دستخط والد / سرپرست: ____________</span></td><td><span class="sgn">تاریخ: ____________</span></td></tr></table></div>`;}
+function printAdmissionForm(){doPrintFrames([admFormFront(),admFormBack()]);}
+/* ---- Leave slip — FINAL design (2 copies on one page) ---- */
+function leaveSlipHTML(s){const f=document.getElementById("lv_from").value,t=document.getElementById("lv_to").value,reason=document.getElementById("lv_reason").value.trim()||"—";
+ let days="—",ret="—";if(f&&t){const d1=new Date(f),d2=new Date(t);days=Math.round((d2-d1)/86400000)+1;const r=new Date(d2);r.setDate(r.getDate()+1);ret=urDate(r.toISOString().slice(0,10));}
+ const no="L-"+today().replace(/-/g,"");
+ return `<div class="lslip">${ph(HDR_C)}<div class="band">رخصت نامہ — چھٹی کی رسید</div>
+ <div class="idstrip"><div><span>رسید نمبر</span><b>${no}</b></div><div><span>تاریخ اجرا</span><b>${urDate(today())}</b></div></div>
+ <div class="idstrip"><div><span>نام طالب علم</span><b>${esc(s.name)}</b></div><div><span>جماعت</span><b>${CLS_UR[s.cls]||s.cls}</b></div><div><span>داخلہ نمبر</span><b>${s.adm}</b></div><div><span>رول نمبر</span><b>${rollOf(s)}</b></div></div>
+ <table><tr><th>چھٹی از تاریخ</th><td>${urDate(f)||"—"}</td><th>چھٹی تا تاریخ</th><td>${urDate(t)||"—"}</td></tr>
+ <tr><th>کل دن</th><td>${days}</td><th>واپسی کی تاریخ</th><td>${ret}</td></tr>
+ <tr><th>چھٹی کی وجہ</th><td colspan="3">${esc(reason)}</td></tr></table>
+ <p class="fnote">نوٹ: چھٹی منظور کر لی گئی ہے۔ بچہ واپسی پر یہ رسید کلاس ٹیچر کو دکھائے؛ ان دنوں کی غیر حاضری چھٹی میں شمار ہوگی۔</p>
+ <table class="fsigs"><tr><td><span class="sgn">کلاس ٹیچر کے دستخط</span></td><td><span class="sgn">والد / سرپرست کے دستخط</span></td><td><span class="sgn">پرنسپل (حافظ محمد انس معاویہ)</span></td></tr></table></div>`;}
+function printLeaveSlip(id){const s=st(id);if(!s)return;const h=leaveSlipHTML(s);doPrintSlips(`<div class="wm"><img src="${LOGO}"></div><div class="frame">${h}</div><div class="fcut"></div><div class="frame">${h}</div>`);}
+/* ---- Parent notice — FINAL design ---- */
+function printNotice(){const g=i=>document.getElementById(i).value;
+ const paras=g("nt_body").split("\n").filter(x=>x.trim()).map(x=>`<p class="npara">${esc(x.trim())}</p>`).join("");
+ const points=g("nt_points").split("\n").filter(x=>x.trim()).map(x=>`<p class="npoint">• ${esc(x.trim())}</p>`).join("");
+ doPrint(`${ph(HDR_A)}<div class="band">اطلاع نامہ</div>
+ <div class="idstrip"><div><span>اطلاع نمبر</span><b>N-${today().replace(/-/g,"")}</b></div><div><span>تاریخ</span><b>${urDate(today())}</b></div><div><span>برائے</span><b>تمام والدین و طلبہ</b></div></div>
+ <p class="nsubj"><b>موضوع:</b> ${esc(g("nt_subject"))}</p>${paras}
+ <div class="band" style="font-size:15px">اہم ہدایات</div>${points}
+ <div class="idstrip"><div><span>دن</span><b>${esc(g("nt_day"))}</b></div><div><span>تاریخ</span><b>${esc(g("nt_date"))}</b></div><div><span>وقت</span><b>${esc(g("nt_time"))}</b></div><div><span>مقام</span><b>${esc(g("nt_place"))}</b></div></div>
+ <p class="fsig" style="margin-top:26px">دستخط: ___________________</p>
+ <p class="fsig"><b>پرنسپل (حافظ محمد انس معاویہ)</b> — رابطہ: ‎${contactPhone()}</p>
+ <div class="fcut"></div>
+ <div class="ackbox"><div class="ackhead">وصولی پرچی — اطلاع موصول ہو گئی (دستخط کر کے بچے کے ہاتھ واپس بھیجیں)</div>
+ <p class="ackrow">نام طالب علم: ____________ &nbsp; جماعت: ____________ &nbsp; والد / سرپرست کے دستخط: ____________ &nbsp; تاریخ: ____________</p></div>`);}
+/* ---- Student ID cards — FINAL design ---- */
+function idFront(s){return `<div class="idcard"><div class="idtop">اقراء جنۃ الاطفال سکول اینڈ اکیڈمی</div><div class="iden">IQRA JANNAT-UL-ATFAL SCHOOL & ACADEMY, RASOOL NAGAR</div><div class="idgold">STUDENT ID CARD • SESSION 2027</div>
+ <div class="idbody"><div class="idphoto">PHOTO</div><div class="iddet"><div><span>NAME</span><b>${esc(s.name)}</b></div><div><span>CLASS</span><b>${esc(s.cls)}</b></div><div><span>ADM NO</span><b>${esc(s.adm)}</b></div><div><span>FATHER</span><b>${esc(s.father||"")}</b></div></div></div>
+ <div class="idslogan">تعلیم کو عزت دو</div></div>`;}
+function idBack(s){return `<div class="idcard"><div class="idbhead">والدین کے لیے اہم معلومات</div>
+ <div class="idnote">یہ کارڈ گم ہو جائے تو اسکول دفتر پہنچا دیں — شکریہ</div>
+ <div class="idrows"><div><span>FATHER'S MOBILE</span><b>${esc(s.phone||"")}</b></div><div><span>SCHOOL</span><b>${contactPhone()}</b></div><div><span>ADDRESS</span><b>Mohalla Rana Town, Behind Mezban Marquee, Rasool Nagar</b></div></div>
+ <div class="idprop">PROPERTY OF THE SCHOOL</div></div>`;}
+function printIDCardsFrom(list){if(!list.length){alert("No students");return;}
+ const fronts=list.map(idFront).join(""),backs=list.map(idBack).join("");
+ doPrintSlips(`<div class="idsheet">${fronts}</div><div class="idsheet" style="page-break-before:always">${backs}</div>`);}
+function printIDCard(id){const s=st(id);if(!s)return;printIDCardsFrom([s]);}
+function printIDCards(cls){let list=DB.students.slice().sort((a,b)=>String(a.adm).localeCompare(String(b.adm)));if(cls)list=list.filter(s=>s.cls===cls);printIDCardsFrom(list);}
 
 /* ---- Messages (SMS preparation) ---- */
 function smsLink(num, body){return "sms:"+String(num||"").replace(/[^0-9+]/g,"")+"?&body="+encodeURIComponent(body);}
