@@ -56,9 +56,10 @@ h3{font-size:15px;color:var(--green);margin:14px 0 8px}
 .att button.a{background:var(--red);color:#fff;border-color:var(--red)}
 #printArea{display:none}
 @media print{
- @page{margin:8mm}
+ @page{size:A4;margin:8mm}
  body>*{display:none!important}
  #printArea{display:block!important;direction:rtl;color:#000;font-family:'Jameel Noori Nastaleeq','Noto Nastaliq Urdu',serif;font-size:14px}
+ #printArea,#printArea *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
  #printArea .frame{border:3px solid #1F5C3D;outline:1px solid #C9A227;outline-offset:4px;padding:12px 12px 8px}
  #printArea .ph img{width:100%;display:block}
  #printArea .band{background:#1F3864;color:#fff;text-align:center;font-weight:700;font-size:17px;padding:3px 0 7px;margin:7px 0}
@@ -417,9 +418,10 @@ function rTemplates(){
 جس بچے کی فیس بقایا ہو، اس کی تفصیل دفتر سے حاصل کر لیں۔</textarea></div>
  <div style="margin-top:8px"><button class="btn ghost" onclick="printNotice()">Print Notice</button></div></div>`;
 }
-function doPrint(html){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div><div class="frame">${html}</div>`;window.print();}
-function doPrintSlips(html){document.getElementById("printArea").innerHTML=html;window.print();}
-function doPrintFrames(pages){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div>`+pages.map((h,i)=>`<div class="frame" ${i?`style="page-break-before:always"`:''}>${h}</div>`).join("");window.print();}
+function printNow(){const pa=document.getElementById("printArea");const imgs=Array.from(pa.querySelectorAll("img"));const wait=imgs.map(im=>(im.complete&&im.naturalWidth>0)?Promise.resolve():new Promise(r=>{const done=()=>r();im.addEventListener("load",done,{once:true});im.addEventListener("error",done,{once:true});}));Promise.race([Promise.all(wait),new Promise(r=>setTimeout(r,3000))]).then(()=>setTimeout(()=>window.print(),60));}
+function doPrint(html){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div><div class="frame">${html}</div>`;printNow();}
+function doPrintSlips(html){document.getElementById("printArea").innerHTML=html;printNow();}
+function doPrintFrames(pages){document.getElementById("printArea").innerHTML=`<div class="wm"><img src="${LOGO}"></div>`+pages.map((h,i)=>`<div class="frame" ${i?`style="page-break-before:always"`:''}>${h}</div>`).join("");printNow();}
 /* ---- shared helpers for the finalized templates ---- */
 const ORD_UR=["اول","دوم","سوم","چہارم","پنجم","ششم","ہفتم","ہشتم","نہم","دہم"];
 const DEENI_SR=["نماز کی پابندی","دعائیں (یاد)","احادیث (یاد)","درود شریف","آداب و اخلاق"];
